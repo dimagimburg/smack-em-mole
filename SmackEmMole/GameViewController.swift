@@ -9,10 +9,14 @@
 import Foundation
 import UIKit
 
-class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource /*, UICollectionViewDelegateFlowLayout */{
+class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, SmackEmMoleDelegate{
     
     @IBOutlet weak var gameBoardContainerView: UIView!
     @IBOutlet weak var gameBoardCollectionView: UICollectionView!
+    
+    
+    @IBOutlet weak var timerBeforeGameStartedView: UIView!
+    @IBOutlet weak var timerBeforeGameStartedLabel: UILabel!
     
     let game: Game = Game()
     var config: Config = Config.sharedInstance
@@ -23,6 +27,10 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGameBoard()
+        
+        // game config
+        game.delegate = self
+        game.gameStart()
     }
 
     override func didReceiveMemoryWarning() {
@@ -70,6 +78,32 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         } else {
             return UIEdgeInsetsMake(tileMargin / 2, leftRight, tileMargin / 2, leftRight)
         }
+    }
+    
+    // SmackEmMole delegation
+    
+    func gameBeforeTimerStarted(secondsToZero: Int){
+        timerBeforeGameStartedLabel.text = String(secondsToZero)
+    }
+    
+    func gameBeforeTimerSecondTick(second: Int){
+        timerBeforeGameStartedLabel.text = String(second)
+    }
+    
+    func gameBeforeTimerFinished(){
+        timerBeforeGameStartedView.removeFromSuperview()
+    }
+    
+    func gameStarted(){
+    
+    }
+    
+    func gamePaused(){
+    
+    }
+    
+    func gameStopped(){
+    
     }
 
 }

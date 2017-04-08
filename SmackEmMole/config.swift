@@ -14,6 +14,10 @@ class Config {
     
     static let sharedInstance: Config = Config()
     
+    // Timers
+    var timerBeforeGameStartSeconds = 3
+    
+    // Board
     var numberOfRows = 7;
     var numberMaxOfColumns = 5;
     var numberMinOfColumns = 4;

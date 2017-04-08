@@ -10,14 +10,21 @@ import Foundation
 
 class Game {
     
+    // more about delegation https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html
+    var delegate: SmackEmMoleDelegate?
     var gameBoard: Array<Array<Cell>>!
     var config: Config = Config.sharedInstance
     
+    var timerBeforeGameStarted: Timer?
+    var timeBeforeGameBegins: Int
+    
     init(){
+        timeBeforeGameBegins = config.timerBeforeGameStartSeconds
+        
         gameBoard = gameGenerateGameBoard()
     }
     
-    private func gameGenerateGameBoard() -> Array<Array<Cell>>{
+    fileprivate func gameGenerateGameBoard() -> Array<Array<Cell>>{
         // this function generates a 2d array for representing the game board
         
         var gameBoardCellsGenerated: Array<Array<Cell>> = []
@@ -34,16 +41,31 @@ class Game {
         return gameBoardCellsGenerated
     }
     
-    public func gameBeforeTimer(){
+    public func gameBeforeTimerStart(){
+        timerBeforeGameStarted = Timer()
+        timerBeforeGameStarted = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(gameBeforeTimerTick), userInfo: nil, repeats: true)
+        delegate?.gameBeforeTimerStarted(secondsToZero: config.timerBeforeGameStartSeconds)
+    }
     
+    @objc func gameBeforeTimerTick(){
+        
+        if (timeBeforeGameBegins == 0){
+            gameBeforeTimerRelease()
+            return
+        }
+        
+        delegate?.gameBeforeTimerSecondTick(second: timeBeforeGameBegins)
+        timeBeforeGameBegins -= 1
     }
     
     public func gameBeforeTimerRelease(){
-    
+        timerBeforeGameStarted?.invalidate()
+        timerBeforeGameStarted = nil
+        delegate?.gameBeforeTimerFinished()
     }
     
     public func gameStart(){
-    
+        gameBeforeTimerStart()
     }
     
     public func gamePause(){
@@ -93,4 +115,13 @@ class Game {
     public func scoreDecrease(){
     
     }
+}
+
+protocol SmackEmMoleDelegate {
+    func gameBeforeTimerStarted(secondsToZero: Int)
+    func gameBeforeTimerSecondTick(second: Int)
+    func gameBeforeTimerFinished()
+    func gameStarted()
+    func gamePaused()
+    func gameStopped()
 }
