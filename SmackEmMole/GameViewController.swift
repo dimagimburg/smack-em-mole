@@ -18,6 +18,8 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     @IBOutlet weak var timerBeforeGameStartedView: UIView!
     @IBOutlet weak var timerBeforeGameStartedLabel: UILabel!
     
+    @IBOutlet weak var timerMainTop: UILabel!
+    
     let game: Game = Game()
     var config: Config = Config.sharedInstance
     let tileMargin = CGFloat(4.0)
@@ -94,8 +96,12 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         timerBeforeGameStartedView.removeFromSuperview()
     }
     
-    func gameStarted(){
+    func gameMainTimerTick(second: Int){
+        timerMainTop.text = String(second)
+    }
     
+    func gameStarted(){
+        print("game started")
     }
     
     func gamePaused(){
@@ -103,7 +109,12 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func gameStopped(){
+        print("game stopped")
+    }
     
+    func gameFinished(){
+        print("game finished")
+        timerMainTop.text = "Game Finished"
     }
 
 }

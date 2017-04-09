@@ -16,6 +16,7 @@ class Config {
     
     // Timers
     var timerBeforeGameStartSeconds = 3
+    var timerGameLength = 60
     
     // Board
     var numberOfRows = 7;

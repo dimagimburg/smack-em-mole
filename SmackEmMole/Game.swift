@@ -15,12 +15,15 @@ class Game {
     var gameBoard: Array<Array<Cell>>!
     var config: Config = Config.sharedInstance
     
+    var timerMain: Timer?
+    var timeUntilGameEnds: Int
+    
     var timerBeforeGameStarted: Timer?
     var timeBeforeGameBegins: Int
     
     init(){
         timeBeforeGameBegins = config.timerBeforeGameStartSeconds
-        
+        timeUntilGameEnds = config.timerGameLength
         gameBoard = gameGenerateGameBoard()
     }
     
@@ -41,7 +44,7 @@ class Game {
         return gameBoardCellsGenerated
     }
     
-    public func gameBeforeTimerStart(){
+    fileprivate func gameBeforeTimerStart(){
         timerBeforeGameStarted = Timer()
         timerBeforeGameStarted = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(gameBeforeTimerTick), userInfo: nil, repeats: true)
         delegate?.gameBeforeTimerStarted(secondsToZero: config.timerBeforeGameStartSeconds)
@@ -51,6 +54,7 @@ class Game {
         
         if (timeBeforeGameBegins == 0){
             gameBeforeTimerRelease()
+            gameMainTimerStart()
             return
         }
         
@@ -58,10 +62,40 @@ class Game {
         timeBeforeGameBegins -= 1
     }
     
-    public func gameBeforeTimerRelease(){
+    fileprivate func gameBeforeTimerRelease(){
         timerBeforeGameStarted?.invalidate()
         timerBeforeGameStarted = nil
         delegate?.gameBeforeTimerFinished()
+    }
+    
+    fileprivate func gameMainTimerStart(){
+        timerMain = Timer()
+        timerMain = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(gameMainTimerTick), userInfo: nil, repeats: true)
+        delegate?.gameStarted()
+    }
+    
+    @objc fileprivate func gameMainTimerTick(){
+        if(timeUntilGameEnds == 0){
+            gameMainTimerFinished()
+            return
+        }
+        
+        delegate?.gameMainTimerTick(second: timeUntilGameEnds)
+        timeUntilGameEnds -= 1
+    }
+    
+    fileprivate func gameMainTimerRelease(){
+        timerMain?.invalidate()
+        timerMain = nil
+    }
+    
+    fileprivate func gameMainTimerFinished(){
+        gameStop()
+        gameFinished()
+    }
+    
+    fileprivate func gameFinished(){
+        delegate?.gameFinished()
     }
     
     public func gameStart(){
@@ -73,7 +107,8 @@ class Game {
     }
     
     public func gameStop(){
-    
+        gameMainTimerRelease()
+        delegate?.gameStopped()
     }
     
     public func gameBeginSpecialMode(){
@@ -121,7 +156,9 @@ protocol SmackEmMoleDelegate {
     func gameBeforeTimerStarted(secondsToZero: Int)
     func gameBeforeTimerSecondTick(second: Int)
     func gameBeforeTimerFinished()
+    func gameMainTimerTick(second: Int)
     func gameStarted()
     func gamePaused()
     func gameStopped()
+    func gameFinished()
 }

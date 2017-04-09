@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -49,12 +50,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g3q-uU-01K">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ros-fW-ZFH">
                                 <rect key="frame" x="0.0" y="20" width="320" height="44"/>
-                                <items>
-                                    <navigationItem title="Game Board" id="vff-jz-ctb"/>
-                                </items>
-                            </navigationBar>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MainCounter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RW7-qV-gUO">
+                                        <rect key="frame" x="110.5" y="12" width="99" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.97639912366867065" green="0.97651249170303345" blue="0.97634702920913696" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="RW7-qV-gUO" firstAttribute="centerX" secondItem="Ros-fW-ZFH" secondAttribute="centerX" id="8l8-9V-sEQ"/>
+                                    <constraint firstItem="RW7-qV-gUO" firstAttribute="centerY" secondItem="Ros-fW-ZFH" secondAttribute="centerY" id="cnC-mD-3gj"/>
+                                    <constraint firstAttribute="height" constant="44" id="vmy-Uo-Rms"/>
+                                </constraints>
+                            </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8C0-Wz-Pcp">
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                                 <items>
@@ -123,16 +135,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="RYv-VP-kbB" firstAttribute="top" secondItem="g3q-uU-01K" secondAttribute="bottom" id="0HW-dO-VfU"/>
                             <constraint firstAttribute="trailing" secondItem="RYv-VP-kbB" secondAttribute="trailing" id="7Ww-Ly-Edf"/>
-                            <constraint firstItem="g3q-uU-01K" firstAttribute="leading" secondItem="s6R-8y-GT5" secondAttribute="leading" id="CZH-hp-QRp"/>
-                            <constraint firstItem="g3q-uU-01K" firstAttribute="top" secondItem="N74-hz-47r" secondAttribute="bottom" id="HNM-eK-2CD"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Ros-fW-ZFH" secondAttribute="trailing" constant="-16" id="EUG-KO-JZs"/>
+                            <constraint firstItem="Ros-fW-ZFH" firstAttribute="leading" secondItem="s6R-8y-GT5" secondAttribute="leadingMargin" constant="-16" id="G8H-gf-xpF"/>
+                            <constraint firstItem="RYv-VP-kbB" firstAttribute="top" secondItem="Ros-fW-ZFH" secondAttribute="bottom" id="GSF-Cu-Bf8"/>
                             <constraint firstItem="RYv-VP-kbB" firstAttribute="leading" secondItem="s6R-8y-GT5" secondAttribute="leading" id="K1a-tw-WDT"/>
                             <constraint firstItem="8C0-Wz-Pcp" firstAttribute="top" secondItem="RYv-VP-kbB" secondAttribute="bottom" id="KwG-k6-mtW"/>
                             <constraint firstAttribute="trailing" secondItem="8C0-Wz-Pcp" secondAttribute="trailing" id="Mxi-gZ-Ih1"/>
+                            <constraint firstItem="Ros-fW-ZFH" firstAttribute="top" secondItem="N74-hz-47r" secondAttribute="bottom" id="S1h-kB-JzP"/>
                             <constraint firstItem="8C0-Wz-Pcp" firstAttribute="leading" secondItem="s6R-8y-GT5" secondAttribute="leading" id="nCj-u2-jrl"/>
                             <constraint firstItem="ipK-uS-7uW" firstAttribute="top" secondItem="8C0-Wz-Pcp" secondAttribute="bottom" id="rY9-zE-hs8"/>
-                            <constraint firstAttribute="trailing" secondItem="g3q-uU-01K" secondAttribute="trailing" id="try-io-brc"/>
                         </constraints>
                     </view>
                     <connections>
@@ -140,6 +152,7 @@
                         <outlet property="gameBoardContainerView" destination="RYv-VP-kbB" id="DW0-lN-C3r"/>
                         <outlet property="timerBeforeGameStartedLabel" destination="394-em-AHb" id="2gU-UA-KEU"/>
                         <outlet property="timerBeforeGameStartedView" destination="CCO-L7-l7z" id="BDt-nN-dWd"/>
+                        <outlet property="timerMainTop" destination="RW7-qV-gUO" id="gGV-3z-zQi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iLA-HO-zxP" userLabel="First Responder" sceneMemberID="firstResponder"/>
