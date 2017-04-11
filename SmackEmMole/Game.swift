@@ -25,6 +25,24 @@ class Game {
         timeBeforeGameBegins = config.timerBeforeGameStartSeconds
         timeUntilGameEnds = config.timerGameLength
         gameBoard = gameGenerateGameBoard()
+        
+        
+        // test the new task dispatcher ive built
+        let t1 = DelayedTask(task: {
+            print("im delayed for 5 seconds", Date())
+        }, delay: 5)
+        
+        let t2 = DelayedTask(task: {
+            print("im delayed for 10 seconds", Date())
+        }, delay: 10)
+        
+        let dispatcher = ConcurrentDelayedTaskDispatcher()
+        
+        dispatcher.addTask(task: t1)
+        dispatcher.addTask(task: t2)
+        
+        dispatcher.dispatch()
+        
     }
     
     fileprivate func gameGenerateGameBoard() -> Array<Array<Cell>>{
@@ -161,4 +179,6 @@ protocol SmackEmMoleDelegate {
     func gamePaused()
     func gameStopped()
     func gameFinished()
+    func molePopped()
+    func moleHid()
 }

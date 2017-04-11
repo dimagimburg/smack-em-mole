@@ -116,5 +116,12 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         print("game finished")
         timerMainTop.text = "Game Finished"
     }
+    
+    func molePopped(){
+    
+    }
 
+    func moleHid() {
+        
+    }
 }
