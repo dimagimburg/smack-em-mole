@@ -20,6 +20,12 @@ class Config {
     
     // Board
     var numberOfRows = 7;
-    var numberMaxOfColumns = 5;
-    var numberMinOfColumns = 4;
+    var numberMaxOfColumns: Int = 5;
+    var numberMinOfColumns: Int = 4;
+    
+    // Game
+    var numberOfMolePopsInEachLevel: Array<Int> = [
+        5, 6, 8, 10, 12, 15
+    ]
+    
 }

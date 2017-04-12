@@ -21,28 +21,13 @@ class Game {
     var timerBeforeGameStarted: Timer?
     var timeBeforeGameBegins: Int
     
+    let molePopTaskDispatcher = ConcurrentDelayedTaskDispatcher()
+    
     init(){
         timeBeforeGameBegins = config.timerBeforeGameStartSeconds
         timeUntilGameEnds = config.timerGameLength
         gameBoard = gameGenerateGameBoard()
-        
-        
-        // test the new task dispatcher ive built
-        let t1 = DelayedTask(task: {
-            print("im delayed for 5 seconds", Date())
-        }, delay: 5)
-        
-        let t2 = DelayedTask(task: {
-            print("im delayed for 10 seconds", Date())
-        }, delay: 10)
-        
-        let dispatcher = ConcurrentDelayedTaskDispatcher()
-        
-        dispatcher.addTask(task: t1)
-        dispatcher.addTask(task: t2)
-        
-        dispatcher.dispatch()
-        
+        generateMolePopsTimes()
     }
     
     fileprivate func gameGenerateGameBoard() -> Array<Array<Cell>>{
@@ -50,8 +35,7 @@ class Game {
         
         var gameBoardCellsGenerated: Array<Array<Cell>> = []
         for _ in 0..<config.numberOfRows {
-            // random int in range taken from: https://gist.github.com/adrfer/6dfb7db29a9c5b9a5b3de1f71008e794#file-int-random-swift-L19
-            let numberOfColumns = config.numberMinOfColumns + Int(arc4random_uniform(UInt32(config.numberMaxOfColumns - config.numberMinOfColumns + 1)))
+            let numberOfColumns: Int = Utils().randomInRange(min: config.numberMinOfColumns, max: config.numberMaxOfColumns)
             var cells: Array<Cell> = []
             for _ in 0..<numberOfColumns {
                 cells.append(Cell())
@@ -60,6 +44,28 @@ class Game {
         }
         
         return gameBoardCellsGenerated
+    }
+    
+    fileprivate func generateMolePopsTimes(){
+        // function to generate mole pops with the configuration in config.numberOfMolePopsInEachLevel
+        
+        let numberOfLevelsInOneGame = config.numberOfMolePopsInEachLevel.count
+        var popTimes: [Double] = []
+        for gameLevel in 0 ... numberOfLevelsInOneGame - 1 {
+            for _ in 0 ... config.numberOfMolePopsInEachLevel[gameLevel] - 1 {
+                let min: Double = Double(Double(gameLevel) * (Double(config.timerGameLength) / Double(numberOfLevelsInOneGame)))
+                let max: Double = Double(Double(gameLevel + 1) * (Double(config.timerGameLength) / Double(numberOfLevelsInOneGame)))
+                popTimes.append(Utils().randomInRange(min: Double(min), max: Double(max)))
+            }
+        }
+        
+        for i in 0...popTimes.count-1 {
+            let t: DelayedTask = DelayedTask(task: {
+                print("poping mole in: ", popTimes[i])
+            }, delay: popTimes[i])
+            molePopTaskDispatcher.addTask(task: t)
+        }
+        
     }
     
     fileprivate func gameBeforeTimerStart(){
@@ -89,6 +95,7 @@ class Game {
     fileprivate func gameMainTimerStart(){
         timerMain = Timer()
         timerMain = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(gameMainTimerTick), userInfo: nil, repeats: true)
+        molePopTaskDispatcher.dispatch()
         delegate?.gameStarted()
     }
     
