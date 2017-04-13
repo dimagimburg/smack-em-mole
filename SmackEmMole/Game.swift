@@ -13,15 +13,17 @@ class Game {
     // more about delegation https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html
     var delegate: SmackEmMoleDelegate?
     var gameBoard: Array<Array<Cell>>!
+    var freeCells: Set<CellIndex> = Set<CellIndex>()
     var config: Config = Config.sharedInstance
     
     var timerMain: Timer?
+    var dateGameBegins: Date?
     var timeUntilGameEnds: Int
     
     var timerBeforeGameStarted: Timer?
     var timeBeforeGameBegins: Int
     
-    let molePopTaskDispatcher = ConcurrentDelayedTaskDispatcher()
+    var popTimes: [Double] = []
     
     init(){
         timeBeforeGameBegins = config.timerBeforeGameStartSeconds
@@ -34,11 +36,12 @@ class Game {
         // this function generates a 2d array for representing the game board
         
         var gameBoardCellsGenerated: Array<Array<Cell>> = []
-        for _ in 0..<config.numberOfRows {
+        for row in 0..<config.numberOfRows {
             let numberOfColumns: Int = Utils().randomInRange(min: config.numberMinOfColumns, max: config.numberMaxOfColumns)
             var cells: Array<Cell> = []
-            for _ in 0..<numberOfColumns {
-                cells.append(Cell())
+            for column in 0..<numberOfColumns {
+                cells.append(Cell(x: column, y: row))
+                freeCells.insert(CellIndex(x: column, y: row))
             }
             gameBoardCellsGenerated.append(cells)
         }
@@ -50,26 +53,33 @@ class Game {
         // function to generate mole pops with the configuration in config.numberOfMolePopsInEachLevel
         
         let numberOfLevelsInOneGame = config.numberOfMolePopsInEachLevel.count
-        var popTimes: [Double] = []
+        
         for gameLevel in 0 ... numberOfLevelsInOneGame - 1 {
             for _ in 0 ... config.numberOfMolePopsInEachLevel[gameLevel] - 1 {
-                let min: Double = Double(Double(gameLevel) * (Double(config.timerGameLength) / Double(numberOfLevelsInOneGame)))
+                let min: Double = Double(Double(gameLevel) * (Double(config.timerGameLength) / Double(numberOfLevelsInOneGame))) + (gameLevel == 0 ? 1 : 0)
                 let max: Double = Double(Double(gameLevel + 1) * (Double(config.timerGameLength) / Double(numberOfLevelsInOneGame)))
                 popTimes.append(Utils().randomInRange(min: Double(min), max: Double(max)))
             }
         }
-        
+    }
+    
+    fileprivate func addPopTasks(){
         for i in 0...popTimes.count-1 {
-            let t: DelayedTask = DelayedTask(task: {
-                print("poping mole in: ", popTimes[i])
-            }, delay: popTimes[i])
-            molePopTaskDispatcher.addTask(task: t)
+            let date = dateGameBegins?.addingTimeInterval(popTimes[i])
+            let timer = Timer(fire: date!, interval: 0, repeats: false, block: { (timer) in
+                // TODO: weak reference to self here
+                print("poping mole in: ", self.popTimes[i], Date(), " --- ", 61 - self.popTimes[i])
+                self.popRandomMole()
+            })
+            RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
         }
+    }
+    
+    fileprivate func popRandomMole(){
         
     }
     
     fileprivate func gameBeforeTimerStart(){
-        timerBeforeGameStarted = Timer()
         timerBeforeGameStarted = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(gameBeforeTimerTick), userInfo: nil, repeats: true)
         delegate?.gameBeforeTimerStarted(secondsToZero: config.timerBeforeGameStartSeconds)
     }
@@ -93,9 +103,11 @@ class Game {
     }
     
     fileprivate func gameMainTimerStart(){
-        timerMain = Timer()
-        timerMain = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(gameMainTimerTick), userInfo: nil, repeats: true)
-        molePopTaskDispatcher.dispatch()
+        // had to add 0.5 seconds to the time of the game start so we could prepare all dependencies
+        dateGameBegins = Date().addingTimeInterval(0.5)
+        timerMain = Timer(fireAt: dateGameBegins!, interval: 1.0, target: self, selector: #selector(gameMainTimerTick), userInfo: nil, repeats: true)
+        RunLoop.main.add(timerMain!, forMode: RunLoopMode.commonModes)
+        addPopTasks()
         delegate?.gameStarted()
     }
     

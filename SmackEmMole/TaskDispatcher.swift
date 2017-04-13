@@ -39,11 +39,13 @@ class ConcurrentDelayedTaskDispatcher : ProtocolTaskDispatcher {
         if concurrentDelayedQueue == nil {
             concurrentDelayedQueue = DispatchQueue(
                 label: queueLabelPrefix + String(getUniqueId()),
-                qos: .userInitiated,
+                qos: .userInteractive,
                 attributes: [.concurrent, .initiallyInactive]
             )
         }
         
+        // print(.now() + delayedTask.delay)
+        //print(Date())
         concurrentDelayedQueue!.asyncAfter(deadline: .now() + delayedTask.delay, execute: {
             task.invoke()
         })

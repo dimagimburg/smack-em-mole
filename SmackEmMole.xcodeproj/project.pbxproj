@@ -15,7 +15,7 @@
 		670575721E92D53900CAADAF /* SmackEmMoleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670575711E92D53900CAADAF /* SmackEmMoleTests.swift */; };
 		6705757D1E92D53900CAADAF /* SmackEmMoleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705757C1E92D53900CAADAF /* SmackEmMoleUITests.swift */; };
 		6705758C1E92D5C400CAADAF /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705758B1E92D5C400CAADAF /* GameViewController.swift */; };
-		670575911E92EB4A00CAADAF /* mole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670575901E92EB4A00CAADAF /* mole.swift */; };
+		670575911E92EB4A00CAADAF /* Mole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670575901E92EB4A00CAADAF /* Mole.swift */; };
 		670575941E92EE2700CAADAF /* config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670575931E92EE2700CAADAF /* config.swift */; };
 		670575971E92F53300CAADAF /* MoleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670575961E92F53300CAADAF /* MoleCollectionViewCell.swift */; };
 		673C6D961E990DBB00E0CF34 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673C6D951E990DBB00E0CF34 /* Game.swift */; };
@@ -56,7 +56,7 @@
 		6705757C1E92D53900CAADAF /* SmackEmMoleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmackEmMoleUITests.swift; sourceTree = "<group>"; };
 		6705757E1E92D53900CAADAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6705758B1E92D5C400CAADAF /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
-		670575901E92EB4A00CAADAF /* mole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mole.swift; sourceTree = "<group>"; };
+		670575901E92EB4A00CAADAF /* Mole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mole.swift; sourceTree = "<group>"; };
 		670575931E92EE2700CAADAF /* config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = config.swift; sourceTree = "<group>"; };
 		670575961E92F53300CAADAF /* MoleCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoleCollectionViewCell.swift; sourceTree = "<group>"; };
 		673C6D951E990DBB00E0CF34 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
@@ -156,7 +156,7 @@
 		6705758D1E92EB0500CAADAF /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				670575901E92EB4A00CAADAF /* mole.swift */,
+				670575901E92EB4A00CAADAF /* Mole.swift */,
 				673C6D951E990DBB00E0CF34 /* Game.swift */,
 				673C6D971E990F0200E0CF34 /* Cell.swift */,
 			);
@@ -319,7 +319,7 @@
 				6705755F1E92D53900CAADAF /* ViewController.swift in Sources */,
 				670575971E92F53300CAADAF /* MoleCollectionViewCell.swift in Sources */,
 				673C6D961E990DBB00E0CF34 /* Game.swift in Sources */,
-				670575911E92EB4A00CAADAF /* mole.swift in Sources */,
+				670575911E92EB4A00CAADAF /* Mole.swift in Sources */,
 				67C4EE6D1E9D874C00E52FC6 /* Utils.swift in Sources */,
 				670575941E92EE2700CAADAF /* config.swift in Sources */,
 				673C6D981E990F0200E0CF34 /* Cell.swift in Sources */,
