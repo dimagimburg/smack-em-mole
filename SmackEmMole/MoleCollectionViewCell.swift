@@ -13,10 +13,7 @@ class MoleCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var cellImageView: UIImageView!
     
     func configCell(){
-        self.cellImageView.image = UIImage(named: "mole")
-        self.backgroundColor = UIColor.blue
-        self.layer.borderColor = UIColor.black.cgColor
-        self.layer.borderWidth = 1
+        self.cellImageView.image = UIImage(named: "MoleHole")
     }
     
 }

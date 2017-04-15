@@ -69,6 +69,10 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: cellWidth!, height: cellHeight!)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        game.cellPressed(x: indexPath.row, y: indexPath.section)
+    }
    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         // UIEdgeInsetsMake (top, left, bottom, right)
@@ -117,11 +121,16 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         timerMainTop.text = "Game Finished"
     }
     
-    func molePopped(){
-    
+    func molePopped(x: Int, y: Int){
+        let index = IndexPath(row: x, section: y)
+        let moleView = gameBoardCollectionView.cellForItem(at: index) as! MoleCollectionViewCell
+        //gameBoardCollectionView.cellForItem(at: index)?.backgroundColor = UIColor.red
+        moleView.cellImageView.image = UIImage(named: "mole")
     }
 
-    func moleHid() {
-        
+    func moleHid(x: Int, y: Int) {
+        let index = IndexPath(row: x, section: y)
+        let moleView = gameBoardCollectionView.cellForItem(at: index) as! MoleCollectionViewCell
+        moleView.cellImageView.image = UIImage(named: "MoleHole")
     }
 }

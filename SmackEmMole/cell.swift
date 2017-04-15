@@ -26,12 +26,16 @@ class Cell {
     var mole: Mole? = nil
     var cellIndex: CellIndex
     
-    init(x: Int, y: Int){
-        self.cellIndex = CellIndex(x: x, y: y)
+    init(cellIndex: CellIndex){
+        self.cellIndex = cellIndex
     }
     
-    func setRandomMole(){
-        let moleTypeIndex = Utils().randomInRange(min: 0, max: MoleType.count)
-        mole = Mole(type: MoleType(rawValue: moleTypeIndex)!)
+    func setMole(moleType: MoleType?){
+        if let type = moleType {
+            mole = Mole(type: type)
+            return
+        }
+        
+        mole = nil
     }
 }
