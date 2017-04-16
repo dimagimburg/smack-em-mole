@@ -21,7 +21,7 @@ class Config {
     let timeMaximumMoleShow = 3.0
     
     // Board
-    let numberOfRows = 7;
+    let numberOfRows = 5;
     let numberMaxOfColumns: Int = 5;
     let numberMinOfColumns: Int = 4;
     

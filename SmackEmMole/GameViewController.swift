@@ -121,16 +121,32 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         timerMainTop.text = "Game Finished"
     }
     
-    func molePopped(x: Int, y: Int){
+    func molePopped(x: Int, y: Int, moleType: MoleType){
         let index = IndexPath(row: x, section: y)
         let moleView = gameBoardCollectionView.cellForItem(at: index) as! MoleCollectionViewCell
-        //gameBoardCollectionView.cellForItem(at: index)?.backgroundColor = UIColor.red
-        moleView.cellImageView.image = UIImage(named: "mole")
+        switch moleType {
+        case MoleType.REGULAR:
+            moleView.cellImageView.image = UIImage(named: "mole_regular")
+            break;
+        case MoleType.MALICIOUS:
+            moleView.cellImageView.image = UIImage(named: "mole_malicious")
+            break;
+        case MoleType.SPECIAL_DOUBLE:
+            moleView.cellImageView.image = UIImage(named: "mole_special_double")
+            break;
+        case MoleType.SPECIAL_QUANTITY:
+            moleView.cellImageView.image = UIImage(named: "mole_special_extra")
+            break;
+        case MoleType.SPECIAL_TIME:
+            moleView.cellImageView.image = UIImage(named: "mole_special_time")
+            break;
+        }
+        
     }
 
     func moleHid(x: Int, y: Int) {
         let index = IndexPath(row: x, section: y)
         let moleView = gameBoardCollectionView.cellForItem(at: index) as! MoleCollectionViewCell
-        moleView.cellImageView.image = UIImage(named: "MoleHole")
+        moleView.cellImageView.image = UIImage(named: "mole_sand")
     }
 }

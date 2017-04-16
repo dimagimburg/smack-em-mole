@@ -13,7 +13,7 @@ class MoleCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var cellImageView: UIImageView!
     
     func configCell(){
-        self.cellImageView.image = UIImage(named: "MoleHole")
+        self.cellImageView.image = UIImage(named: "mole_sand")
     }
     
 }

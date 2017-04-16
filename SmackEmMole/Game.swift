@@ -174,7 +174,7 @@ class Game {
     
     public func molePop(cell: Cell){
         print("index: \(cell.cellIndex.x),\(cell.cellIndex.y) - is \(String(describing: cell.mole?.type))")
-        delegate?.molePopped(x: cell.cellIndex.x, y: cell.cellIndex.y)
+        delegate?.molePopped(x: cell.cellIndex.x, y: cell.cellIndex.y, moleType: (cell.mole?.type)!)
         let timeMoleShown = utils.randomInRange(min: config.timeMinimumMoleShow, max: config.timeMaximumMoleShow)
         let dateMoleToBeHid = Date().addingTimeInterval(timeMoleShown)
         let timerMoleHide = Timer(fire: dateMoleToBeHid, interval: 0, repeats: false, block: { (timer) in
@@ -236,6 +236,6 @@ protocol SmackEmMoleDelegate {
     func gamePaused()
     func gameStopped()
     func gameFinished()
-    func molePopped(x: Int, y: Int)
+    func molePopped(x: Int, y: Int, moleType: MoleType)
     func moleHid(x: Int, y: Int)
 }
