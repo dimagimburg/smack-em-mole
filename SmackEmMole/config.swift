@@ -25,6 +25,10 @@ class Config {
     let numberMaxOfColumns: Int = 5;
     let numberMinOfColumns: Int = 4;
     
+    // Score
+    let scoreHitMole = 10
+    let scoreHitMaliciousMole = -5
+    
     // Game
     let numberOfMolePopsInEachLevel: Array<Int> = [
         5, 6, 8, 10, 12, 15

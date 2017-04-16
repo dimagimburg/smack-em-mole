@@ -14,6 +14,7 @@ class Game {
     // 1. naming conventions for functions
     // 2. before game timer move to ui and not bl
     // 3. make order with x and y and use row and column instead or section and row
+    // 4. consider moving game timers of all kinds to a special service
     
     // more about delegation https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html
     var delegate: SmackEmMoleDelegate?
@@ -21,6 +22,7 @@ class Game {
     var freeCells: [Cell] = [Cell]()
     var config: Config = Config.sharedInstance
     var utils = Utils()
+    var player = Player(withName: "Player (default)")
     
     var timerMain: Timer?
     var dateGameBegins: Date?
@@ -173,14 +175,12 @@ class Game {
     }
     
     public func molePop(cell: Cell){
-        print("index: \(cell.cellIndex.x),\(cell.cellIndex.y) - is \(String(describing: cell.mole?.type))")
         delegate?.molePopped(x: cell.cellIndex.x, y: cell.cellIndex.y, moleType: (cell.mole?.type)!)
         let timeMoleShown = utils.randomInRange(min: config.timeMinimumMoleShow, max: config.timeMaximumMoleShow)
         let dateMoleToBeHid = Date().addingTimeInterval(timeMoleShown)
         let timerMoleHide = Timer(fire: dateMoleToBeHid, interval: 0, repeats: false, block: { (timer) in
             // TODO: weak reference to self here
             cell.setMole(moleType: nil)
-            print("index: \(cell.cellIndex.x),\(cell.cellIndex.y) - is \(String(describing: cell.mole?.type))")
             self.freeCells.append(cell)
             self.moleHide(cell: cell)
         })
@@ -217,14 +217,6 @@ class Game {
     public func moleHitSpecial(){
     
     }
-    
-    public func scroeIncrease(){
-    
-    }
-    
-    public func scoreDecrease(){
-    
-    }
 }
 
 protocol SmackEmMoleDelegate {
@@ -238,4 +230,5 @@ protocol SmackEmMoleDelegate {
     func gameFinished()
     func molePopped(x: Int, y: Int, moleType: MoleType)
     func moleHid(x: Int, y: Int)
+    func scoreChanged(score: Score)
 }

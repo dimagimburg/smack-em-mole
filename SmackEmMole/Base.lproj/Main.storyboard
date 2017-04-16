@@ -50,11 +50,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ros-fW-ZFH">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ros-fW-ZFH" userLabel="TopBar">
                                 <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MainCounter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RW7-qV-gUO">
-                                        <rect key="frame" x="110.5" y="12" width="99" height="21"/>
+                                        <rect key="frame" x="16" y="12" width="99" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qu8-Mc-LAb">
+                                        <rect key="frame" x="259.5" y="11" width="44.5" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -62,9 +68,11 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.97639912366867065" green="0.97651249170303345" blue="0.97634702920913696" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="RW7-qV-gUO" firstAttribute="centerX" secondItem="Ros-fW-ZFH" secondAttribute="centerX" id="8l8-9V-sEQ"/>
-                                    <constraint firstItem="RW7-qV-gUO" firstAttribute="centerY" secondItem="Ros-fW-ZFH" secondAttribute="centerY" id="cnC-mD-3gj"/>
+                                    <constraint firstAttribute="trailing" secondItem="qu8-Mc-LAb" secondAttribute="trailing" constant="16" id="MWy-95-SXC"/>
+                                    <constraint firstItem="qu8-Mc-LAb" firstAttribute="centerY" secondItem="Ros-fW-ZFH" secondAttribute="centerY" id="VxF-S9-DXb"/>
+                                    <constraint firstItem="RW7-qV-gUO" firstAttribute="centerY" secondItem="Ros-fW-ZFH" secondAttribute="centerY" id="Xmt-Gc-gGV"/>
                                     <constraint firstAttribute="height" constant="44" id="vmy-Uo-Rms"/>
+                                    <constraint firstItem="RW7-qV-gUO" firstAttribute="leading" secondItem="Ros-fW-ZFH" secondAttribute="leading" constant="16" id="z8W-ci-cz1"/>
                                 </constraints>
                             </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8C0-Wz-Pcp">

@@ -149,4 +149,8 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         let moleView = gameBoardCollectionView.cellForItem(at: index) as! MoleCollectionViewCell
         moleView.cellImageView.image = UIImage(named: "mole_sand")
     }
+    
+    func scoreChanged(score: Score){
+    
+    }
 }
