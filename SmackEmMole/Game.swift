@@ -191,37 +191,45 @@ class Game {
         delegate?.moleHid(x: cell.cellIndex.x, y: cell.cellIndex.y)
     }
     
-    public func molePopSpecial(){
-    
-    }
-    
-    public func moleHideSpecial(){
-    
-    }
-    
     public func cellPressed(x: Int, y: Int){
         let cellPressed = gameBoard[y][x]
-        if(cellPressed.mole != nil && player.score.score > 0){
-            // here handle all types of moles
-            if(cellPressed.mole?.type == MoleType.MALICIOUS){
-                player.score.hitMaliciousMole()
-            } else {
-                player.score.hitRegularMole()
-            }
-            
-            delegate?.scoreChanged(score: player.score)
+        if(cellPressed.mole != nil){
+            moleHit(moleType: (cellPressed.mole?.type)!)
         }
         
         // this is not right, only for debug purposes, the right handle should be in the if statement above
         moleHide(cell: cellPressed)
     }
     
-    public func moleHit(){
-    
+    public func moleHit(moleType: MoleType){
+        switch moleType {
+        case MoleType.MALICIOUS:
+            if(player.score.score > 0){
+                moleHitMalicious()
+            }
+            break
+        case MoleType.REGULAR:
+            moleHitRegular()
+            break
+        default:
+            moleHitSpecial(moleType: moleType)
+            break
+        }
+        
+        delegate?.scoreChanged(score: player.score)
     }
     
-    public func moleHitSpecial(){
+    public func moleHitMalicious(){
+        player.score.hitMaliciousMole()
+    }
     
+    public func moleHitRegular(){
+        player.score.hitRegularMole()
+    }
+    
+    public func moleHitSpecial(moleType: MoleType){
+        // TODO: here implement the hit of special mole
+        moleHitRegular()
     }
 }
 
