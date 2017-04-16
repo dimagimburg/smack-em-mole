@@ -33,6 +33,9 @@ class Game {
     
     var popTimes: [Double]!
     
+    // counts the number of times the special time mole hit in order to know when to add more mole pops when time is added
+    var specialTimeMoleHit: Int = 0
+    
     init(){
         timeBeforeGameBegins = config.timerBeforeGameStartSeconds
         timeUntilGameEnds = config.timerGameLength
@@ -229,7 +232,35 @@ class Game {
     
     public func moleHitSpecial(moleType: MoleType){
         // TODO: here implement the hit of special mole
-        moleHitRegular()
+        switch moleType {
+        case MoleType.SPECIAL_TIME:
+            // TODO: MAKE THIS MORE GENERALIZED AND DECOUPLED.
+            timeUntilGameEnds += config.numberSecondsAddSpecialTime
+            gameMainTimerTick()
+            for _ in 0 ... config.numberMolesPopSpecialTime {
+                let date =
+                    dateGameBegins?.addingTimeInterval(Double(config.timerGameLength) +
+                        utils.randomInRange(
+                            min: 0.0,
+                            max: Double(config.numberSecondsAddSpecialTime)
+                        )
+                    )
+                
+                // this function below is used also in the regular pop, so need to generalize it.
+                // and even more than that need to implement a class that implements all timers
+                let timer = Timer(fire: date!, interval: 0, repeats: false, block: { (timer) in
+                    // TODO: weak reference to self here
+                    print("poping extra mole in time special")
+                    self.popRandomMole()
+                })
+                RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
+                
+            }
+            break;
+        default:
+            moleHitRegular()
+            break;
+        }
     }
 }
 

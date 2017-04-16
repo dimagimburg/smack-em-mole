@@ -30,6 +30,12 @@ class Config {
     let scoreHitMaliciousMole = -5
     
     // Game
+    let numberSecondsAddSpecialTime = 4 // the number of seconds added when special time mole got hit
+    let numberMolesPopSpecialTime = 4 // number of moles to pop on the special time
+    
+    let numberSecondsSpecialExtraOn = 5 // number of seconds special extra is on
+    let numberMolePerSecondPopExtra = 3 // number of moles to pop per second when extra mode is active
+    
     let numberOfMolePopsInEachLevel: Array<Int> = [
         5, 6, 8, 10, 12, 15
     ]
