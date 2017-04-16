@@ -201,13 +201,19 @@ class Game {
     
     public func cellPressed(x: Int, y: Int){
         let cellPressed = gameBoard[y][x]
-        if(cellPressed.mole != nil){
+        if(cellPressed.mole != nil && player.score.score > 0){
             // here handle all types of moles
+            if(cellPressed.mole?.type == MoleType.MALICIOUS){
+                player.score.hitMaliciousMole()
+            } else {
+                player.score.hitRegularMole()
+            }
+            
+            delegate?.scoreChanged(score: player.score)
         }
         
         // this is not right, only for debug purposes, the right handle should be in the if statement above
         moleHide(cell: cellPressed)
-        print("pressed on \(cellPressed.cellIndex.x), \(cellPressed.cellIndex.y)")
     }
     
     public func moleHit(){

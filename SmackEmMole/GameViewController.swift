@@ -19,6 +19,7 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     @IBOutlet weak var timerBeforeGameStartedLabel: UILabel!
     
     @IBOutlet weak var timerMainTop: UILabel!
+    @IBOutlet weak var scoreLabel: UILabel!
     
     let game: Game = Game()
     var config: Config = Config.sharedInstance
@@ -151,6 +152,6 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func scoreChanged(score: Score){
-    
+        scoreLabel.text = "Score: \(score.score)"
     }
 }

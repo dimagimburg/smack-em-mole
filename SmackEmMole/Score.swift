@@ -22,7 +22,7 @@ class Score {
     }
     
     func hitMaliciousMole(){
-        score += config.scoreHitMole
+        score += config.scoreHitMaliciousMole
     }
     
     func setDoubleMode(isDoubleMode: Bool){
