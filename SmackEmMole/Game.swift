@@ -17,12 +17,14 @@ class Game {
     // 4. consider moving game timers of all kinds to a special service
     
     // more about delegation https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html
+    
     var delegate: SmackEmMoleDelegate?
     var gameBoard: Array<Array<Cell>>!
     var freeCells: [Cell] = [Cell]()
     var config: Config = Config.sharedInstance
     var utils = Utils()
     var player = Player(withName: "Player (default)")
+    var cellTimersManager = CellTimersManager()
     
     var timerMain: Timer?
     var dateGameBegins: Date?
@@ -80,15 +82,32 @@ class Game {
     
     fileprivate func addMolePopTimers(){
         for i in 0...popTimes.count-1 {
-            let date = dateGameBegins?.addingTimeInterval(popTimes[i])
-            let timer = Timer(fire: date!, interval: 0, repeats: false, block: { (timer) in
-                // TODO: weak reference to self here
-                self.popRandomMole()
+            //let date = dateGameBegins?.addingTimeInterval(popTimes[i])
+            cellTimersManager.addTimer(withDelay: popTimes[i], withCallback: {
+                let cell = self.moleShowRandom()
+                self.delegate?.molePopped(x: cell.cellIndex.x, y: cell.cellIndex.y, moleType: (cell.mole?.type)!)
+                let timeMoleToBeShown = self.utils.randomInRange(min: self.config.timeMinimumMoleShow, max: self.config.timeMaximumMoleShow)
+                
+                return (cell.cellIndex, timeMoleToBeShown, {
+                    cell.setMole(moleType: nil)
+                    self.freeCells.append(cell)
+                    self.moleHide(cell: cell)
+                })
             })
-            RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
         }
     }
     
+    func moleShowRandom() -> Cell {
+        let randomCellIndex = self.utils.randomInRange(min: 0, max: self.freeCells.count - 1)
+        let cell = self.freeCells.remove(at: randomCellIndex)
+        
+        let randomMoleType = self.config.arrayMoleTypeProbabilities[self.utils.randomInRange(min: 0, max: self.config.arrayMoleTypeProbabilities.count - 1)]
+        
+        cell.setMole(moleType: randomMoleType)
+        return cell
+    }
+    
+    /*
     fileprivate func popRandomMole(){
         let randomCellIndex = utils.randomInRange(min: 0, max: freeCells.count - 1)
         let cell = freeCells.remove(at: randomCellIndex)
@@ -99,6 +118,7 @@ class Game {
         
         molePop(cell: cell)
     }
+    */
     
     fileprivate func gameBeforeTimerStart(){
         timerBeforeGameStarted = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(gameBeforeTimerTick), userInfo: nil, repeats: true)
@@ -126,6 +146,7 @@ class Game {
     fileprivate func gameMainTimerStart(){
         // had to add 0.5 seconds to the time of the game start so we could prepare all dependencies
         dateGameBegins = Date().addingTimeInterval(0.5)
+        cellTimersManager.setAnchorDate(withDate: dateGameBegins!)
         timerMain = Timer(fireAt: dateGameBegins!, interval: 1.0, target: self, selector: #selector(gameMainTimerTick), userInfo: nil, repeats: true)
         RunLoop.main.add(timerMain!, forMode: RunLoopMode.commonModes)
         addMolePopTimers()
@@ -177,6 +198,7 @@ class Game {
     
     }
     
+    /*
     public func molePop(cell: Cell){
         delegate?.molePopped(x: cell.cellIndex.x, y: cell.cellIndex.y, moleType: (cell.mole?.type)!)
         let timeMoleShown = utils.randomInRange(min: config.timeMinimumMoleShow, max: config.timeMaximumMoleShow)
@@ -189,6 +211,7 @@ class Game {
         })
         RunLoop.main.add(timerMoleHide, forMode: RunLoopMode.commonModes)
     }
+    */
     
     public func moleHide(cell: Cell){
         delegate?.moleHid(x: cell.cellIndex.x, y: cell.cellIndex.y)
@@ -251,7 +274,7 @@ class Game {
                 let timer = Timer(fire: date!, interval: 0, repeats: false, block: { (timer) in
                     // TODO: weak reference to self here
                     print("poping extra mole in time special")
-                    self.popRandomMole()
+                    //self.popRandomMole()
                 })
                 RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
                 
