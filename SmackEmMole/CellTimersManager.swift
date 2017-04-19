@@ -10,6 +10,7 @@ import Foundation
 
 class CellTimersManager {
 
+    var delegate: CellTimersManagerDelegate?
     var anchorDate = Date()
     var hideTimers = [CellIndex: Timer]()
     
@@ -34,4 +35,24 @@ class CellTimersManager {
         RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
     }
     
+    func releaseTimer(releaseFor cellIndex: CellIndex){
+        if let timer = hideTimers[cellIndex] {
+            timer.invalidate()
+            hideTimers.removeValue(forKey: cellIndex)
+            delegate?.timerInvalidated(forCellIndex: cellIndex)
+        }
+    }
+    
+    func releaseAllTimers(){
+        for (cellIndex, timer) in hideTimers {
+            timer.invalidate()
+            hideTimers.removeValue(forKey: cellIndex)
+            delegate?.timerInvalidated(forCellIndex: cellIndex)
+        }
+    }
+    
+}
+
+protocol CellTimersManagerDelegate {
+    func timerInvalidated(forCellIndex cellIndex: CellIndex)
 }

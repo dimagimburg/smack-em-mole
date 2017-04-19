@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Game {
+class Game: CellTimersManagerDelegate {
     
     // TODO:
     // 1. naming conventions for functions
@@ -43,6 +43,9 @@ class Game {
         timeUntilGameEnds = config.timerGameLength
         gameBoard = gameGenerateGameBoard()
         popTimes = generateMolePopsTimes()
+        
+        // delegation
+        cellTimersManager.delegate = self
     }
     
     fileprivate func gameGenerateGameBoard() -> Array<Array<Cell>>{
@@ -82,22 +85,25 @@ class Game {
     
     fileprivate func addMolePopTimers(){
         for i in 0...popTimes.count-1 {
-            //let date = dateGameBegins?.addingTimeInterval(popTimes[i])
-            cellTimersManager.addTimer(withDelay: popTimes[i], withCallback: {
-                let cell = self.moleShowRandom()
-                self.delegate?.molePopped(x: cell.cellIndex.x, y: cell.cellIndex.y, moleType: (cell.mole?.type)!)
-                let timeMoleToBeShown = self.utils.randomInRange(min: self.config.timeMinimumMoleShow, max: self.config.timeMaximumMoleShow)
-                
-                return (cell.cellIndex, timeMoleToBeShown, {
-                    cell.setMole(moleType: nil)
-                    self.freeCells.append(cell)
-                    self.moleHide(cell: cell)
-                })
-            })
+            setRandomMolePopAndHide(withDelay: popTimes[i])
         }
     }
     
-    func moleShowRandom() -> Cell {
+    fileprivate func setRandomMolePopAndHide(withDelay delay: Double){
+        cellTimersManager.addTimer(withDelay: delay, withCallback: {
+            let cell = self.getRandomCell()
+            self.delegate?.molePopped(x: cell.cellIndex.x, y: cell.cellIndex.y, moleType: (cell.mole?.type)!)
+            let timeMoleToBeShown = self.utils.randomInRange(min: self.config.timeMinimumMoleShow, max: self.config.timeMaximumMoleShow)
+            
+            return (cell.cellIndex, timeMoleToBeShown, {
+                cell.setMole(moleType: nil)
+                self.freeCells.append(cell)
+                self.moleHide(cell: cell)
+            })
+        })
+    }
+    
+    fileprivate func getRandomCell() -> Cell {
         let randomCellIndex = self.utils.randomInRange(min: 0, max: self.freeCells.count - 1)
         let cell = self.freeCells.remove(at: randomCellIndex)
         
@@ -106,19 +112,6 @@ class Game {
         cell.setMole(moleType: randomMoleType)
         return cell
     }
-    
-    /*
-    fileprivate func popRandomMole(){
-        let randomCellIndex = utils.randomInRange(min: 0, max: freeCells.count - 1)
-        let cell = freeCells.remove(at: randomCellIndex)
-        
-        let randomMoleType = config.arrayMoleTypeProbabilities[utils.randomInRange(min: 0, max: config.arrayMoleTypeProbabilities.count - 1)]
-        
-        cell.setMole(moleType: randomMoleType)
-        
-        molePop(cell: cell)
-    }
-    */
     
     fileprivate func gameBeforeTimerStart(){
         timerBeforeGameStarted = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(gameBeforeTimerTick), userInfo: nil, repeats: true)
@@ -198,23 +191,12 @@ class Game {
     
     }
     
-    /*
-    public func molePop(cell: Cell){
-        delegate?.molePopped(x: cell.cellIndex.x, y: cell.cellIndex.y, moleType: (cell.mole?.type)!)
-        let timeMoleShown = utils.randomInRange(min: config.timeMinimumMoleShow, max: config.timeMaximumMoleShow)
-        let dateMoleToBeHid = Date().addingTimeInterval(timeMoleShown)
-        let timerMoleHide = Timer(fire: dateMoleToBeHid, interval: 0, repeats: false, block: { (timer) in
-            // TODO: weak reference to self here
-            cell.setMole(moleType: nil)
-            self.freeCells.append(cell)
-            self.moleHide(cell: cell)
-        })
-        RunLoop.main.add(timerMoleHide, forMode: RunLoopMode.commonModes)
-    }
-    */
-    
     public func moleHide(cell: Cell){
         delegate?.moleHid(x: cell.cellIndex.x, y: cell.cellIndex.y)
+    }
+    
+    public func moleHide(forCellIndex cellIndex: CellIndex){
+        delegate?.moleHid(x: cellIndex.x, y: cellIndex.y)
     }
     
     public func cellPressed(x: Int, y: Int){
@@ -224,6 +206,7 @@ class Game {
         }
         
         // this is not right, only for debug purposes, the right handle should be in the if statement above
+        // and releasing the timer properly.
         moleHide(cell: cellPressed)
     }
     
@@ -233,6 +216,9 @@ class Game {
             if(player.score.score > 0){
                 moleHitMalicious()
             }
+            // TODO: here make a release to all timers running right now, sort of board clearance as a penalty for hitting malicious mole
+            
+            cellTimersManager.releaseAllTimers()
             break
         case MoleType.REGULAR:
             moleHitRegular()
@@ -254,30 +240,18 @@ class Game {
     }
     
     public func moleHitSpecial(moleType: MoleType){
-        // TODO: here implement the hit of special mole
         switch moleType {
         case MoleType.SPECIAL_TIME:
             // TODO: MAKE THIS MORE GENERALIZED AND DECOUPLED.
+            
+            // timer clock increase
             timeUntilGameEnds += config.numberSecondsAddSpecialTime
             gameMainTimerTick()
+            
+            // pop random moles accordingly
             for _ in 0 ... config.numberMolesPopSpecialTime {
-                let date =
-                    dateGameBegins?.addingTimeInterval(Double(config.timerGameLength) +
-                        utils.randomInRange(
-                            min: 0.0,
-                            max: Double(config.numberSecondsAddSpecialTime)
-                        )
-                    )
-                
-                // this function below is used also in the regular pop, so need to generalize it.
-                // and even more than that need to implement a class that implements all timers
-                let timer = Timer(fire: date!, interval: 0, repeats: false, block: { (timer) in
-                    // TODO: weak reference to self here
-                    print("poping extra mole in time special")
-                    //self.popRandomMole()
-                })
-                RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
-                
+                let delay = Double(config.timerGameLength) + utils.randomInRange(min: 0.0, max: Double(config.numberSecondsAddSpecialTime))
+                setRandomMolePopAndHide(withDelay: delay)
             }
             break;
         default:
@@ -285,6 +259,13 @@ class Game {
             break;
         }
     }
+    
+    // CellTimersManager delegate
+    
+    func timerInvalidated(forCellIndex cellIndex: CellIndex){
+        moleHide(forCellIndex: cellIndex)
+    }
+    
 }
 
 protocol SmackEmMoleDelegate {
