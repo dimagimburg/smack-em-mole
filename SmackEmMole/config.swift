@@ -59,4 +59,11 @@ class Config {
         return spread
     }
     
+    enum GameOngoingMode: String {
+        case REGULAR
+        case SPECIAL_TIME
+        case SPECIAL_QUANTITY
+        case SPECIAL_DOUBLE
+    }
+    
 }

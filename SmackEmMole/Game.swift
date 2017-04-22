@@ -14,7 +14,7 @@ class Game: CellTimersManagerDelegate {
     // 1. naming conventions for functions
     // 2. before game timer move to ui and not bl
     // 3. make order with x and y and use row and column instead or section and row
-    // 4. consider moving game timers of all kinds to a special service
+    // 4. consider moving - all - game timers of all kinds to a special service (2)
     
     // more about delegation https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html
     
@@ -24,6 +24,7 @@ class Game: CellTimersManagerDelegate {
     var config: Config = Config.sharedInstance
     var utils = Utils()
     var player = Player(withName: "Player (default)")
+    var currentOngoingGameMode = Config.GameOngoingMode.REGULAR
     var cellTimersManager = CellTimersManager()
     
     var timerMain: Timer?
@@ -280,4 +281,5 @@ protocol SmackEmMoleDelegate {
     func molePopped(x: Int, y: Int, moleType: MoleType)
     func moleHid(x: Int, y: Int)
     func scoreChanged(score: Score)
+    func ongoingGameModeChanged(newMode: Config.GameOngoingMode)
 }

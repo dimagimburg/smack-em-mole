@@ -22,21 +22,60 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CNI-0T-ffV">
-                                <rect key="frame" x="121" y="269" width="78" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Start Game"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="homescreen-background" translatesAutoresizingMaskIntoConstraints="NO" id="gDV-uW-Dxd">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="MVj-Wm-kCK">
+                                <rect key="frame" x="0.0" y="70" width="320" height="166"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="166" id="ffL-AS-EGW"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0RR-hC-9eF">
+                                <rect key="frame" x="16" y="251" width="288" height="63"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="63" id="Xpc-uD-8Y3"/>
+                                </constraints>
+                                <state key="normal" image="start-button"/>
                                 <connections>
-                                    <segue destination="8Sh-j1-rNV" kind="show" id="bNL-l6-CHH"/>
+                                    <segue destination="8Sh-j1-rNV" kind="show" id="i9c-Z5-W3b"/>
                                 </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YCA-kj-YxN">
+                                <rect key="frame" x="16" y="324" width="288" height="63"/>
+                                <state key="normal" image="options-button"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ye-aD-TvV">
+                                <rect key="frame" x="16" y="397" width="288" height="63"/>
+                                <state key="normal" title="Button" image="highscores-button"/>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="0RR-hC-9eF" secondAttribute="trailing" id="1qI-Dx-1zg"/>
+                            <constraint firstItem="7ye-aD-TvV" firstAttribute="leading" secondItem="0RR-hC-9eF" secondAttribute="leading" id="80P-22-sHa"/>
+                            <constraint firstItem="gDV-uW-Dxd" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="C1v-c8-290"/>
+                            <constraint firstItem="YCA-kj-YxN" firstAttribute="width" secondItem="0RR-hC-9eF" secondAttribute="width" id="GiY-dh-Yaf"/>
+                            <constraint firstItem="MVj-Wm-kCK" firstAttribute="centerX" secondItem="gDV-uW-Dxd" secondAttribute="centerX" id="Lg7-oQ-Vxn"/>
+                            <constraint firstItem="7ye-aD-TvV" firstAttribute="trailing" secondItem="0RR-hC-9eF" secondAttribute="trailing" id="RcG-2J-dXz"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="0RR-hC-9eF" secondAttribute="leading" id="WYL-8Z-Sfx"/>
+                            <constraint firstItem="MVj-Wm-kCK" firstAttribute="width" secondItem="gDV-uW-Dxd" secondAttribute="width" id="aQ0-ET-7P1"/>
+                            <constraint firstItem="YCA-kj-YxN" firstAttribute="centerX" secondItem="0RR-hC-9eF" secondAttribute="centerX" id="eEj-yO-ocG"/>
+                            <constraint firstItem="YCA-kj-YxN" firstAttribute="height" secondItem="0RR-hC-9eF" secondAttribute="height" id="fAf-Ic-GTv"/>
+                            <constraint firstItem="0RR-hC-9eF" firstAttribute="top" secondItem="MVj-Wm-kCK" secondAttribute="bottom" constant="15" id="g6b-qI-nKS"/>
+                            <constraint firstItem="7ye-aD-TvV" firstAttribute="top" secondItem="YCA-kj-YxN" secondAttribute="bottom" constant="10" id="jKT-KF-c64"/>
+                            <constraint firstItem="7ye-aD-TvV" firstAttribute="height" secondItem="0RR-hC-9eF" secondAttribute="height" id="joP-AX-VCy"/>
+                            <constraint firstItem="gDV-uW-Dxd" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="nfa-Df-yf4"/>
+                            <constraint firstItem="gDV-uW-Dxd" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="sri-0y-XTQ"/>
+                            <constraint firstItem="gDV-uW-Dxd" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="tbP-Pt-o0M"/>
+                            <constraint firstItem="MVj-Wm-kCK" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="50" id="vrR-DF-PO5"/>
+                            <constraint firstItem="YCA-kj-YxN" firstAttribute="top" secondItem="0RR-hC-9eF" secondAttribute="bottom" constant="10" id="zMd-ll-SRK"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="332" y="42"/>
+            <point key="canvasLocation" x="331.875" y="41.197183098591552"/>
         </scene>
         <!--Game View Controller-->
         <scene sceneID="vyK-tE-TMo">
@@ -174,5 +213,10 @@
     </scenes>
     <resources>
         <image name="background" width="538" height="718"/>
+        <image name="highscores-button" width="842" height="201"/>
+        <image name="homescreen-background" width="1536" height="2048"/>
+        <image name="logo" width="1300" height="800"/>
+        <image name="options-button" width="842" height="201"/>
+        <image name="start-button" width="842" height="201"/>
     </resources>
 </document>

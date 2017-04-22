@@ -154,4 +154,8 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func scoreChanged(score: Score){
         scoreLabel.text = "Score: \(score.score)"
     }
+    
+    func ongoingGameModeChanged(newMode: Config.GameOngoingMode) {
+    
+    }
 }
