@@ -251,9 +251,15 @@ class Game: CellTimersManagerDelegate {
             
             // pop random moles accordingly
             for _ in 0 ... config.numberMolesPopSpecialTime {
-                let delay = Double(config.timerGameLength) + utils.randomInRange(min: 0.0, max: Double(config.numberSecondsAddSpecialTime))
+                let delay =
+                    Double(config.timerGameLength) + // end of game time
+                    Double(specialTimeMoleHit * config.numberSecondsAddSpecialTime) + // time special hit
+                    utils.randomInRange(min: 0.0, max: Double(config.numberSecondsAddSpecialTime)) // random range
+                
                 setRandomMolePopAndHide(withDelay: delay)
             }
+            
+            specialTimeMoleHit += 1
             break;
         default:
             moleHitRegular()
