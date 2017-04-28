@@ -19,6 +19,7 @@ class Config {
     let timerGameLength = 60
     let timeMinimumMoleShow = 1.5
     let timeMaximumMoleShow = 3.0
+    let timeDoubleMode = 5.0
     
     // Board
     let numberOfRows = 5;

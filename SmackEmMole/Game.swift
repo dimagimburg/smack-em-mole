@@ -91,7 +91,7 @@ class Game: CellTimersManagerDelegate {
     }
     
     fileprivate func setRandomMolePopAndHide(withDelay delay: Double){
-        cellTimersManager.addTimer(withDelay: delay, withCallback: {
+        cellTimersManager.addListedTimer(withDelay: delay, withCallback: {
             let cell = self.getRandomCell()
             self.delegate?.molePopped(x: cell.cellIndex.x, y: cell.cellIndex.y, moleType: (cell.mole?.type)!)
             let timeMoleToBeShown = self.utils.randomInRange(min: self.config.timeMinimumMoleShow, max: self.config.timeMaximumMoleShow)
@@ -168,6 +168,7 @@ class Game: CellTimersManagerDelegate {
     }
     
     fileprivate func gameFinished(){
+        // TODO: handle here with mole still appearing a little bit after game finishes.
         delegate?.gameFinished()
     }
     
@@ -260,6 +261,14 @@ class Game: CellTimersManagerDelegate {
             }
             
             specialTimeMoleHit += 1
+            break;
+        case MoleType.SPECIAL_DOUBLE:
+            player.score.setDoubleMode(isDoubleMode: true)
+            delegate?.ongoingGameModeChanged(newMode: Config.GameOngoingMode.SPECIAL_DOUBLE)
+            cellTimersManager.addRegularTimer(widthDelay: config.timeDoubleMode, withCallback: {
+                self.delegate?.ongoingGameModeChanged(newMode: Config.GameOngoingMode.REGULAR)
+                self.player.score.setDoubleMode(isDoubleMode: false)
+            })
             break;
         default:
             moleHitRegular()
