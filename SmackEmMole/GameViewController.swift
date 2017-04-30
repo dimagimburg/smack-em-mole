@@ -102,6 +102,7 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func gameMainTimerTick(second: Int){
+        print("second self: \(second)")
         timerMainTop.text = String(second)
     }
     

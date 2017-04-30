@@ -10,9 +10,10 @@ import Foundation
 
 class GameTimersManager {
 
-    var delegate: CellTimersManagerDelegate?
+    var delegate: GameTimersManagerDelegate?
     var anchorDate = Date()
     var hideCellTimers = [CellIndex: Timer]()
+    var regularTimers = [String: RegularDelayedIntervalTimer]()
     
     func setAnchorDate(withDate date: Date){
         self.anchorDate = date
@@ -45,24 +46,82 @@ class GameTimersManager {
         RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
     }
     
-    func releaseCellTimer(releaseFor cellIndex: CellIndex){
+    func addRegularTimer(forKey key: String, withDelay delay: Double, loops loopsToRun: Int, withInterval interval: Double, forEachIntervalDo loopFunction: @escaping (_ remaining: Int) -> (), withCallback callback: @escaping () -> ()){
+        if loopsToRun < 1 {
+            return
+        }
+        
+        let regularDelayedIntervalTimer = RegularDelayedIntervalTimer(key: key, date: Date(), delay: delay, loopsToRun: loopsToRun, interval: interval, loopFunction: loopFunction, callback: callback)
+        
+        regularDelayedIntervalTimer.start()
+        
+        regularTimers[key] = regularDelayedIntervalTimer
+    }
+    
+    func addLoops(forTimerKey key: String, loopsAmount loops: Int){
+        regularTimers[key]?.addLoops(moreLoops: loops)
+    }
+    
+    func releaseListedCellTimer(releaseFor cellIndex: CellIndex){
         if let timer = hideCellTimers[cellIndex] {
             timer.invalidate()
             hideCellTimers.removeValue(forKey: cellIndex)
-            delegate?.timerInvalidated(forCellIndex: cellIndex)
+            delegate?.listedCellTimerInvalidated(forCellIndex: cellIndex)
         }
     }
     
-    func releaseAllCellTimers(){
+    func releaseAllListedCellTimers(){
         for (cellIndex, timer) in hideCellTimers {
             timer.invalidate()
             hideCellTimers.removeValue(forKey: cellIndex)
-            delegate?.timerInvalidated(forCellIndex: cellIndex)
+            delegate?.listedCellTimerInvalidated(forCellIndex: cellIndex)
         }
     }
     
 }
 
-protocol CellTimersManagerDelegate {
-    func timerInvalidated(forCellIndex cellIndex: CellIndex)
+class RegularDelayedIntervalTimer {
+    let key: String
+    var date: Date
+    let delay: Double
+    var loops: Int
+    let interval: Double
+    let loopFunction: (_ remaining: Int) -> ()
+    let callback: () -> ()
+    var timer: Timer?
+    
+    init(key: String, date: Date, delay: Double, loopsToRun: Int, interval: Double, loopFunction: @escaping (_ remaining: Int) -> (), callback: @escaping () -> ()){
+        self.key = key
+        self.date = date
+        self.delay = delay
+        self.loops = loopsToRun
+        self.interval = interval
+        self.loopFunction = loopFunction
+        self.callback = callback
+    }
+    
+    func start(){
+        date.addTimeInterval(delay)
+        
+        timer = Timer(fire: date, interval: interval, repeats: true, block: { (timer) in
+            // TODO: weak reference for self
+            self.loopFunction(self.loops)
+            self.loops -= 1
+            if(self.loops == 0){
+                self.callback()
+                timer.invalidate()
+            }
+        })
+        
+        RunLoop.main.add(timer!, forMode: RunLoopMode.commonModes)
+    }
+    
+    func addLoops(moreLoops: Int){
+        loops += moreLoops
+    }
+
+}
+
+protocol GameTimersManagerDelegate {
+    func listedCellTimerInvalidated(forCellIndex cellIndex: CellIndex)
 }

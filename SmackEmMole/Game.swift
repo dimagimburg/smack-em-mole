@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Game: CellTimersManagerDelegate {
+class Game: GameTimersManagerDelegate {
     
     // TODO:
     // 1. naming conventions for functions
@@ -27,12 +27,12 @@ class Game: CellTimersManagerDelegate {
     var currentOngoingGameMode = Config.GameOngoingMode.REGULAR
     var gameTimersManager = GameTimersManager()
     
-    var timerMain: Timer?
     var dateGameBegins: Date?
     var timeUntilGameEnds: Int
     
     var timerBeforeGameStarted: Timer?
     var timeBeforeGameBegins: Int
+    var timerMainUniqueKey = "timer_main"
     
     var popTimes: [Double]!
     
@@ -139,27 +139,24 @@ class Game: CellTimersManagerDelegate {
     
     fileprivate func gameMainTimerStart(){
         // had to add 0.5 seconds to the time of the game start so we could prepare all dependencies
-        dateGameBegins = Date().addingTimeInterval(0.5)
+        let beginGameDelay = 0.5
+        dateGameBegins = Date().addingTimeInterval(beginGameDelay)
         gameTimersManager.setAnchorDate(withDate: dateGameBegins!)
-        timerMain = Timer(fireAt: dateGameBegins!, interval: 1.0, target: self, selector: #selector(gameMainTimerTick), userInfo: nil, repeats: true)
-        RunLoop.main.add(timerMain!, forMode: RunLoopMode.commonModes)
+        timeUntilGameEnds = config.timerGameLength
+        
+        gameTimersManager.addRegularTimer(forKey: timerMainUniqueKey, withDelay: beginGameDelay, loops: timeUntilGameEnds, withInterval: 1.0, forEachIntervalDo: { (secondsLeft) in
+            self.delegate?.gameMainTimerTick(second: secondsLeft)
+            self.timeUntilGameEnds = secondsLeft
+        }, withCallback: {
+            self.gameMainTimerFinished()
+        })
+        
         addMolePopTimers()
         delegate?.gameStarted()
     }
     
-    @objc fileprivate func gameMainTimerTick(){
-        if(timeUntilGameEnds == 0){
-            gameMainTimerFinished()
-            return
-        }
-        
-        delegate?.gameMainTimerTick(second: timeUntilGameEnds)
-        timeUntilGameEnds -= 1
-    }
-    
     fileprivate func gameMainTimerRelease(){
-        timerMain?.invalidate()
-        timerMain = nil
+        
     }
     
     fileprivate func gameMainTimerFinished(){
@@ -220,7 +217,7 @@ class Game: CellTimersManagerDelegate {
             }
             // TODO: here make a release to all timers running right now, sort of board clearance as a penalty for hitting malicious mole
             
-            gameTimersManager.releaseAllCellTimers()
+            gameTimersManager.releaseAllListedCellTimers()
             break
         case MoleType.REGULAR:
             moleHitRegular()
@@ -244,11 +241,8 @@ class Game: CellTimersManagerDelegate {
     public func moleHitSpecial(moleType: MoleType){
         switch moleType {
         case MoleType.SPECIAL_TIME:
-            // TODO: MAKE THIS MORE GENERALIZED AND DECOUPLED.
-            
             // timer clock increase
-            timeUntilGameEnds += config.numberSecondsAddSpecialTime
-            gameMainTimerTick()
+            gameTimersManager.addLoops(forTimerKey: timerMainUniqueKey, loopsAmount: config.numberSecondsAddSpecialTime)
             
             // pop random moles accordingly
             for _ in 0 ... config.numberMolesPopSpecialTime {
@@ -278,7 +272,7 @@ class Game: CellTimersManagerDelegate {
     
     // CellTimersManager delegate
     
-    func timerInvalidated(forCellIndex cellIndex: CellIndex){
+    func listedCellTimerInvalidated(forCellIndex cellIndex: CellIndex){
         moleHide(forCellIndex: cellIndex)
     }
     
