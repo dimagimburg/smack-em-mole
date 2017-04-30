@@ -155,10 +155,6 @@ class Game: GameTimersManagerDelegate {
         delegate?.gameStarted()
     }
     
-    fileprivate func gameMainTimerRelease(){
-        
-    }
-    
     fileprivate func gameMainTimerFinished(){
         gameStop()
         gameFinished()
@@ -166,6 +162,7 @@ class Game: GameTimersManagerDelegate {
     
     fileprivate func gameFinished(){
         // TODO: handle here with mole still appearing a little bit after game finishes.
+        
         delegate?.gameFinished()
     }
     
@@ -178,7 +175,6 @@ class Game: GameTimersManagerDelegate {
     }
     
     public func gameStop(){
-        gameMainTimerRelease()
         delegate?.gameStopped()
     }
     
@@ -203,6 +199,7 @@ class Game: GameTimersManagerDelegate {
         if(cellPressed.mole != nil){
             moleHit(moleType: (cellPressed.mole?.type)!)
         }
+        cellPressed.mole = nil
         
         // this is not right, only for debug purposes, the right handle should be in the if statement above
         // and releasing the timer properly.
