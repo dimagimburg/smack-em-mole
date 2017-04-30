@@ -8,17 +8,17 @@
 
 import Foundation
 
-class CellTimersManager {
+class GameTimersManager {
 
     var delegate: CellTimersManagerDelegate?
     var anchorDate = Date()
-    var hideTimers = [CellIndex: Timer]()
+    var hideCellTimers = [CellIndex: Timer]()
     
     func setAnchorDate(withDate date: Date){
         self.anchorDate = date
     }
 
-    func addListedTimer(withDelay delay: Double, withCallback callback: @escaping () -> (hideCellIndex: CellIndex, withDelay: Double, withCallback: () -> Void)){
+    func addListedCellTimer(withDelay delay: Double, withCallback callback: @escaping () -> (hideCellIndex: CellIndex, withDelay: Double, withCallback: () -> Void)){
         // listed timer is a timer that we can invalidate and we keep it in the hideTimers list
         let delayedDate = anchorDate.addingTimeInterval(delay)
         let timer = Timer(fire: delayedDate, interval: 0, repeats: false, block: { (timer) in
@@ -28,9 +28,9 @@ class CellTimersManager {
             let timerMoleHide = Timer(fire: dateMoleToHide, interval: 0, repeats: false, block: { (timer) in
                 // TODO: weak reference to self here
                 hideCallback()
-                self.hideTimers.removeValue(forKey: cellIndex)
+                self.hideCellTimers.removeValue(forKey: cellIndex)
             })
-            self.hideTimers[cellIndex] = timerMoleHide
+            self.hideCellTimers[cellIndex] = timerMoleHide
             RunLoop.main.add(timerMoleHide, forMode: RunLoopMode.commonModes)
         })
         RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
@@ -45,18 +45,18 @@ class CellTimersManager {
         RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
     }
     
-    func releaseTimer(releaseFor cellIndex: CellIndex){
-        if let timer = hideTimers[cellIndex] {
+    func releaseCellTimer(releaseFor cellIndex: CellIndex){
+        if let timer = hideCellTimers[cellIndex] {
             timer.invalidate()
-            hideTimers.removeValue(forKey: cellIndex)
+            hideCellTimers.removeValue(forKey: cellIndex)
             delegate?.timerInvalidated(forCellIndex: cellIndex)
         }
     }
     
-    func releaseAllTimers(){
-        for (cellIndex, timer) in hideTimers {
+    func releaseAllCellTimers(){
+        for (cellIndex, timer) in hideCellTimers {
             timer.invalidate()
-            hideTimers.removeValue(forKey: cellIndex)
+            hideCellTimers.removeValue(forKey: cellIndex)
             delegate?.timerInvalidated(forCellIndex: cellIndex)
         }
     }

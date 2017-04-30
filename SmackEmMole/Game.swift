@@ -25,7 +25,7 @@ class Game: CellTimersManagerDelegate {
     var utils = Utils()
     var player = Player(withName: "Player (default)")
     var currentOngoingGameMode = Config.GameOngoingMode.REGULAR
-    var cellTimersManager = CellTimersManager()
+    var gameTimersManager = GameTimersManager()
     
     var timerMain: Timer?
     var dateGameBegins: Date?
@@ -46,7 +46,7 @@ class Game: CellTimersManagerDelegate {
         popTimes = generateMolePopsTimes()
         
         // delegation
-        cellTimersManager.delegate = self
+        gameTimersManager.delegate = self
     }
     
     fileprivate func gameGenerateGameBoard() -> Array<Array<Cell>>{
@@ -91,7 +91,7 @@ class Game: CellTimersManagerDelegate {
     }
     
     fileprivate func setRandomMolePopAndHide(withDelay delay: Double){
-        cellTimersManager.addListedTimer(withDelay: delay, withCallback: {
+        gameTimersManager.addListedCellTimer(withDelay: delay, withCallback: {
             let cell = self.getRandomCell()
             self.delegate?.molePopped(x: cell.cellIndex.x, y: cell.cellIndex.y, moleType: (cell.mole?.type)!)
             let timeMoleToBeShown = self.utils.randomInRange(min: self.config.timeMinimumMoleShow, max: self.config.timeMaximumMoleShow)
@@ -140,7 +140,7 @@ class Game: CellTimersManagerDelegate {
     fileprivate func gameMainTimerStart(){
         // had to add 0.5 seconds to the time of the game start so we could prepare all dependencies
         dateGameBegins = Date().addingTimeInterval(0.5)
-        cellTimersManager.setAnchorDate(withDate: dateGameBegins!)
+        gameTimersManager.setAnchorDate(withDate: dateGameBegins!)
         timerMain = Timer(fireAt: dateGameBegins!, interval: 1.0, target: self, selector: #selector(gameMainTimerTick), userInfo: nil, repeats: true)
         RunLoop.main.add(timerMain!, forMode: RunLoopMode.commonModes)
         addMolePopTimers()
@@ -220,7 +220,7 @@ class Game: CellTimersManagerDelegate {
             }
             // TODO: here make a release to all timers running right now, sort of board clearance as a penalty for hitting malicious mole
             
-            cellTimersManager.releaseAllTimers()
+            gameTimersManager.releaseAllCellTimers()
             break
         case MoleType.REGULAR:
             moleHitRegular()
@@ -265,7 +265,7 @@ class Game: CellTimersManagerDelegate {
         case MoleType.SPECIAL_DOUBLE:
             player.score.setDoubleMode(isDoubleMode: true)
             delegate?.ongoingGameModeChanged(newMode: Config.GameOngoingMode.SPECIAL_DOUBLE)
-            cellTimersManager.addRegularTimer(widthDelay: config.timeDoubleMode, withCallback: {
+            gameTimersManager.addRegularTimer(widthDelay: config.timeDoubleMode, withCallback: {
                 self.delegate?.ongoingGameModeChanged(newMode: Config.GameOngoingMode.REGULAR)
                 self.player.score.setDoubleMode(isDoubleMode: false)
             })
