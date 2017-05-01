@@ -114,13 +114,25 @@
                                     <constraint firstItem="RW7-qV-gUO" firstAttribute="leading" secondItem="Ros-fW-ZFH" secondAttribute="leading" constant="16" id="z8W-ci-cz1"/>
                                 </constraints>
                             </view>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8C0-Wz-Pcp">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ipj-hR-6VK" userLabel="BottomBar">
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
-                                <color key="backgroundColor" red="0.50196081400000003" green="0.25098040700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <items>
-                                    <barButtonItem title="Item" id="jvv-Ya-lKW"/>
-                                </items>
-                            </toolbar>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J84-88-B59">
+                                        <rect key="frame" x="8" y="2" width="40" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="PZW-Wg-cBB"/>
+                                        </constraints>
+                                        <state key="normal" image="button-pause"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.90227681398391724" green="0.66968232393264771" blue="0.33406215906143188" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="J84-88-B59" firstAttribute="top" secondItem="ipj-hR-6VK" secondAttribute="top" constant="2" id="LDE-Vy-dw8"/>
+                                    <constraint firstItem="J84-88-B59" firstAttribute="leading" secondItem="ipj-hR-6VK" secondAttribute="leading" constant="8" id="e3e-Yl-LOW"/>
+                                    <constraint firstAttribute="height" constant="44" id="iGY-M6-vfo"/>
+                                    <constraint firstAttribute="bottom" secondItem="J84-88-B59" secondAttribute="bottom" constant="2" id="vld-aE-2Ea"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RYv-VP-kbB">
                                 <rect key="frame" x="0.0" y="64" width="320" height="460"/>
                                 <subviews>
@@ -158,10 +170,10 @@
                                         </cells>
                                     </collectionView>
                                     <view alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CCO-L7-l7z" userLabel="BeforeStartTimerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
+                                        <rect key="frame" x="0.0" y="-44" width="320" height="548"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BeforeGameTimer" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="394-em-AHb">
-                                                <rect key="frame" x="80" y="218" width="161" height="24"/>
+                                                <rect key="frame" x="80" y="262" width="161" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -176,9 +188,7 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="CCO-L7-l7z" firstAttribute="leading" secondItem="RYv-VP-kbB" secondAttribute="leading" id="1An-W2-zKe"/>
-                                    <constraint firstItem="CCO-L7-l7z" firstAttribute="top" secondItem="RYv-VP-kbB" secondAttribute="top" id="C3d-oD-k5q"/>
                                     <constraint firstItem="CCO-L7-l7z" firstAttribute="width" secondItem="RYv-VP-kbB" secondAttribute="width" id="OFf-ub-7L1"/>
-                                    <constraint firstItem="CCO-L7-l7z" firstAttribute="height" secondItem="RYv-VP-kbB" secondAttribute="height" id="Xq4-WG-5HR"/>
                                 </constraints>
                                 <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                             </view>
@@ -186,15 +196,17 @@
                         <color key="backgroundColor" red="0.50196081400000003" green="0.25098040700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="RYv-VP-kbB" secondAttribute="trailing" id="7Ww-Ly-Edf"/>
+                            <constraint firstItem="ipK-uS-7uW" firstAttribute="top" secondItem="CCO-L7-l7z" secondAttribute="bottom" id="9Dc-9H-zl1"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Ros-fW-ZFH" secondAttribute="trailing" constant="-16" id="EUG-KO-JZs"/>
                             <constraint firstItem="Ros-fW-ZFH" firstAttribute="leading" secondItem="s6R-8y-GT5" secondAttribute="leadingMargin" constant="-16" id="G8H-gf-xpF"/>
                             <constraint firstItem="RYv-VP-kbB" firstAttribute="top" secondItem="Ros-fW-ZFH" secondAttribute="bottom" id="GSF-Cu-Bf8"/>
                             <constraint firstItem="RYv-VP-kbB" firstAttribute="leading" secondItem="s6R-8y-GT5" secondAttribute="leading" id="K1a-tw-WDT"/>
-                            <constraint firstItem="8C0-Wz-Pcp" firstAttribute="top" secondItem="RYv-VP-kbB" secondAttribute="bottom" id="KwG-k6-mtW"/>
-                            <constraint firstAttribute="trailing" secondItem="8C0-Wz-Pcp" secondAttribute="trailing" id="Mxi-gZ-Ih1"/>
+                            <constraint firstItem="ipj-hR-6VK" firstAttribute="centerX" secondItem="s6R-8y-GT5" secondAttribute="centerX" id="Kna-cL-auG"/>
+                            <constraint firstItem="ipj-hR-6VK" firstAttribute="top" secondItem="RYv-VP-kbB" secondAttribute="bottom" id="OJL-CP-LwM"/>
                             <constraint firstItem="Ros-fW-ZFH" firstAttribute="top" secondItem="N74-hz-47r" secondAttribute="bottom" id="S1h-kB-JzP"/>
-                            <constraint firstItem="8C0-Wz-Pcp" firstAttribute="leading" secondItem="s6R-8y-GT5" secondAttribute="leading" id="nCj-u2-jrl"/>
-                            <constraint firstItem="ipK-uS-7uW" firstAttribute="top" secondItem="8C0-Wz-Pcp" secondAttribute="bottom" id="rY9-zE-hs8"/>
+                            <constraint firstItem="CCO-L7-l7z" firstAttribute="top" secondItem="N74-hz-47r" secondAttribute="bottom" id="gJQ-1m-766"/>
+                            <constraint firstItem="ipK-uS-7uW" firstAttribute="top" secondItem="ipj-hR-6VK" secondAttribute="bottom" id="iAz-9J-Cgm"/>
+                            <constraint firstItem="ipj-hR-6VK" firstAttribute="width" secondItem="s6R-8y-GT5" secondAttribute="width" id="qbO-3A-Pfh"/>
                         </constraints>
                     </view>
                     <connections>
@@ -213,6 +225,7 @@
     </scenes>
     <resources>
         <image name="background" width="538" height="718"/>
+        <image name="button-pause" width="200" height="200"/>
         <image name="highscores-button" width="842" height="201"/>
         <image name="homescreen-background" width="1536" height="2048"/>
         <image name="logo" width="1300" height="800"/>

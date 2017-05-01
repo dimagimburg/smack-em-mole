@@ -12,10 +12,8 @@ class Game: GameTimersManagerDelegate {
     
     // TODO:
     // 1. naming conventions for functions
-    // 2. before game timer move to ui and not bl
-    // 3. make order with x and y and use row and column instead or section and row
-    // 4. consider moving - all - game timers of all kinds to a special service (2)
-    
+    // 2. make order with x and y and use row and column instead or section and row
+
     // more about delegation https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html
     
     var delegate: SmackEmMoleDelegate?
