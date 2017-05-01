@@ -26,13 +26,16 @@ class Game: GameTimersManagerDelegate {
     var player = Player(withName: "Player (default)")
     var currentOngoingGameMode = Config.GameOngoingMode.REGULAR
     var gameTimersManager = GameTimersManager()
+    var gameIsOn: Bool = false
     
     var dateGameBegins: Date?
     var timeUntilGameEnds: Int
     
     var timerBeforeGameStarted: Timer?
     var timeBeforeGameBegins: Int
-    var timerMainUniqueKey = "timer_main"
+    var timerMainUniqueKey = "timer_game_main"
+    // TODO: make timer_before_game work with the timers manager
+    var timerBeforeGameUniqueKey = "timer_before_game"
     
     var popTimes: [Double]!
     
@@ -143,6 +146,7 @@ class Game: GameTimersManagerDelegate {
         dateGameBegins = Date().addingTimeInterval(beginGameDelay)
         gameTimersManager.setAnchorDate(withDate: dateGameBegins!)
         timeUntilGameEnds = config.timerGameLength
+        gameIsOn = true
         
         gameTimersManager.addRegularTimer(forKey: timerMainUniqueKey, withDelay: beginGameDelay, loops: timeUntilGameEnds, withInterval: 1.0, forEachIntervalDo: { (secondsLeft) in
             self.delegate?.gameMainTimerTick(second: secondsLeft)
@@ -161,8 +165,8 @@ class Game: GameTimersManagerDelegate {
     }
     
     fileprivate func gameFinished(){
-        // TODO: handle here with mole still appearing a little bit after game finishes.
-        
+        gameTimersManager.releaseAllListedCellTimers() // when main timer finished clear all moles popped
+        gameIsOn = false
         delegate?.gameFinished()
     }
     

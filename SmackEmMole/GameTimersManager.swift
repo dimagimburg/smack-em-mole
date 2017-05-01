@@ -107,9 +107,9 @@ class RegularDelayedIntervalTimer {
             // TODO: weak reference for self
             self.loopFunction(self.loops)
             self.loops -= 1
-            if(self.loops == 0){
-                self.callback()
+            if(self.loops < 0){
                 timer.invalidate()
+                self.callback()
             }
         })
         
