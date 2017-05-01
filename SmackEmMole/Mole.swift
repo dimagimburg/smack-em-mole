@@ -23,6 +23,11 @@ class Mole {
     var type: MoleType
     
     init(type: MoleType){
+        //print("init mole")
         self.type = type
+    }
+    
+    deinit{
+        //print("deinit mole")
     }
 }

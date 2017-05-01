@@ -22,16 +22,14 @@ class GameTimersManager {
     func addListedCellTimer(withDelay delay: Double, withCallback callback: @escaping () -> (hideCellIndex: CellIndex, withDelay: Double, withCallback: () -> Void)){
         // listed timer is a timer that we can invalidate and we keep it in the hideTimers list
         let delayedDate = anchorDate.addingTimeInterval(delay)
-        let timer = Timer(fire: delayedDate, interval: 0, repeats: false, block: { (timer) in
-            // TODO: weak reference to self here
+        let timer = Timer(fire: delayedDate, interval: 0, repeats: false, block: { [weak self] (timer) in
             let (cellIndex, hideTime, hideCallback) = callback() // tuple got from game
             let dateMoleToHide = delayedDate.addingTimeInterval(hideTime)
-            let timerMoleHide = Timer(fire: dateMoleToHide, interval: 0, repeats: false, block: { (timer) in
-                // TODO: weak reference to self here
+            let timerMoleHide = Timer(fire: dateMoleToHide, interval: 0, repeats: false, block: { [weak self] (timer) in
                 hideCallback()
-                self.hideCellTimers.removeValue(forKey: cellIndex)
+                self?.hideCellTimers.removeValue(forKey: cellIndex)
             })
-            self.hideCellTimers[cellIndex] = timerMoleHide
+            self?.hideCellTimers[cellIndex] = timerMoleHide
             RunLoop.main.add(timerMoleHide, forMode: RunLoopMode.commonModes)
         })
         RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
@@ -103,13 +101,12 @@ class RegularDelayedIntervalTimer {
     func start(){
         date.addTimeInterval(delay)
         
-        timer = Timer(fire: date, interval: interval, repeats: true, block: { (timer) in
-            // TODO: weak reference for self
-            self.loopFunction(self.loops)
-            self.loops -= 1
-            if(self.loops < 0){
+        timer = Timer(fire: date, interval: interval, repeats: true, block: { [weak self] (timer) in
+            self?.loopFunction((self?.loops)!)
+            self?.loops -= 1
+            if((self?.loops)! < 0){
                 timer.invalidate()
-                self.callback()
+                self?.callback()
             }
         })
         

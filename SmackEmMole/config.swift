@@ -10,7 +10,13 @@ import Foundation
 
 class Config {
     
-    private init(){}
+    private init(){
+        print("init config")
+    }
+    
+    deinit{
+        print("deinit config")
+    }
     
     static let sharedInstance: Config = Config()
     

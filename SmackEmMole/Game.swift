@@ -59,7 +59,7 @@ class Game: GameTimersManagerDelegate {
         for row in 0..<config.numberOfRows {
             let numberOfColumns: Int = utils.randomInRange(min: config.numberMinOfColumns, max: config.numberMaxOfColumns)
             var cells: Array<Cell> = []
-            for column in 0..<numberOfColumns {
+            for column in 0 ..< numberOfColumns {
                 let cellIndex: CellIndex = CellIndex(x: column, y: row)
                 let cell = Cell(cellIndex: cellIndex)
                 freeCells.append(cell)
@@ -99,10 +99,10 @@ class Game: GameTimersManagerDelegate {
             self.delegate?.molePopped(x: cell.cellIndex.x, y: cell.cellIndex.y, moleType: (cell.mole?.type)!)
             let timeMoleToBeShown = self.utils.randomInRange(min: self.config.timeMinimumMoleShow, max: self.config.timeMaximumMoleShow)
             
-            return (cell.cellIndex, timeMoleToBeShown, {
+            return (cell.cellIndex, timeMoleToBeShown, { [weak self] in
                 cell.setMole(moleType: nil)
-                self.freeCells.append(cell)
-                self.moleHide(cell: cell)
+                self?.freeCells.append(cell)
+                self?.moleHide(cell: cell)
             })
         })
     }
@@ -148,11 +148,11 @@ class Game: GameTimersManagerDelegate {
         timeUntilGameEnds = config.timerGameLength
         gameIsOn = true
         
-        gameTimersManager.addRegularTimer(forKey: timerMainUniqueKey, withDelay: beginGameDelay, loops: timeUntilGameEnds, withInterval: 1.0, forEachIntervalDo: { (secondsLeft) in
-            self.delegate?.gameMainTimerTick(second: secondsLeft)
-            self.timeUntilGameEnds = secondsLeft
-        }, withCallback: {
-            self.gameMainTimerFinished()
+        gameTimersManager.addRegularTimer(forKey: timerMainUniqueKey, withDelay: beginGameDelay, loops: timeUntilGameEnds, withInterval: 1.0, forEachIntervalDo: { [weak self] (secondsLeft) in
+            self?.delegate?.gameMainTimerTick(second: secondsLeft)
+            self?.timeUntilGameEnds = secondsLeft
+        }, withCallback: { [weak self] in
+            self?.gameMainTimerFinished()
         })
         
         addMolePopTimers()
@@ -216,8 +216,8 @@ class Game: GameTimersManagerDelegate {
             if(player.score.score > 0){
                 moleHitMalicious()
             }
-            // TODO: here make a release to all timers running right now, sort of board clearance as a penalty for hitting malicious mole
             
+            // release to all timers running right now, sort of board clearance as a penalty for hitting malicious mole
             gameTimersManager.releaseAllListedCellTimers()
             break
         case MoleType.REGULAR:
@@ -260,9 +260,9 @@ class Game: GameTimersManagerDelegate {
         case MoleType.SPECIAL_DOUBLE:
             player.score.setDoubleMode(isDoubleMode: true)
             delegate?.ongoingGameModeChanged(newMode: Config.GameOngoingMode.SPECIAL_DOUBLE)
-            gameTimersManager.addRegularTimer(widthDelay: config.timeDoubleMode, withCallback: {
-                self.delegate?.ongoingGameModeChanged(newMode: Config.GameOngoingMode.REGULAR)
-                self.player.score.setDoubleMode(isDoubleMode: false)
+            gameTimersManager.addRegularTimer(widthDelay: config.timeDoubleMode, withCallback: { [weak self] in
+                self?.delegate?.ongoingGameModeChanged(newMode: Config.GameOngoingMode.REGULAR)
+                self?.player.score.setDoubleMode(isDoubleMode: false)
             })
             break;
         default:
