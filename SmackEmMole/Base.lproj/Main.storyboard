@@ -117,12 +117,15 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ipj-hR-6VK" userLabel="BottomBar">
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J84-88-B59">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J84-88-B59" userLabel="PauseButton">
                                         <rect key="frame" x="8" y="2" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="PZW-Wg-cBB"/>
                                         </constraints>
                                         <state key="normal" image="button-pause"/>
+                                        <connections>
+                                            <action selector="pauseButtonPressed:" destination="8Sh-j1-rNV" eventType="touchUpInside" id="5OH-oS-4MN"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.90227681398391724" green="0.66968232393264771" blue="0.33406215906143188" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -192,11 +195,61 @@
                                 </constraints>
                                 <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="deV-CZ-CQw" userLabel="OptionsPauseMenuView">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="options-menu-bg" translatesAutoresizingMaskIntoConstraints="NO" id="ULM-Qf-vpL" userLabel="OptionsPauseMenuBackground">
+                                        <rect key="frame" x="20" y="20" width="280" height="420"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Dx-xN-OxB" userLabel="QuitOptionPauseMenuButton">
+                                        <rect key="frame" x="40" y="330" width="240" height="90"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="90" id="xEt-8d-73j"/>
+                                        </constraints>
+                                        <state key="normal" image="option-quit-button"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sMD-oX-PbL" userLabel="RestartOptionPauseMenuButton">
+                                        <rect key="frame" x="40" y="230" width="240" height="90"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="90" id="Q7X-fz-D0F"/>
+                                        </constraints>
+                                        <state key="normal" image="option-restart-button"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xUI-lv-cna">
+                                        <rect key="frame" x="40" y="130" width="240" height="90"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="90" id="Nj8-dF-Ctb"/>
+                                        </constraints>
+                                        <state key="normal" image="option-resume-button"/>
+                                        <connections>
+                                            <action selector="optionsPauseMenuResumeButtonPressed:" destination="8Sh-j1-rNV" eventType="touchUpInside" id="7VF-He-5UP"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.72336632013320923" green="0.61445930412027594" blue="0.40005254107122401" alpha="0.56686108732876717" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="5Dx-xN-OxB" firstAttribute="top" secondItem="sMD-oX-PbL" secondAttribute="bottom" constant="10" id="8Hs-f3-eKj"/>
+                                    <constraint firstItem="ULM-Qf-vpL" firstAttribute="top" secondItem="deV-CZ-CQw" secondAttribute="top" constant="20" id="D64-1z-a6a"/>
+                                    <constraint firstAttribute="bottom" secondItem="ULM-Qf-vpL" secondAttribute="bottom" constant="64" id="IyQ-cF-0Cg"/>
+                                    <constraint firstItem="sMD-oX-PbL" firstAttribute="top" secondItem="xUI-lv-cna" secondAttribute="bottom" constant="10" id="L42-lx-7YH"/>
+                                    <constraint firstAttribute="bottom" secondItem="5Dx-xN-OxB" secondAttribute="bottom" constant="84" id="Qsw-cW-Pch"/>
+                                    <constraint firstItem="ULM-Qf-vpL" firstAttribute="leading" secondItem="deV-CZ-CQw" secondAttribute="leading" constant="20" id="YVE-WO-KVp"/>
+                                    <constraint firstAttribute="trailing" secondItem="xUI-lv-cna" secondAttribute="trailing" constant="40" id="cqg-4q-WFf"/>
+                                    <constraint firstItem="sMD-oX-PbL" firstAttribute="leading" secondItem="deV-CZ-CQw" secondAttribute="leading" constant="40" id="d5K-La-lw1"/>
+                                    <constraint firstItem="5Dx-xN-OxB" firstAttribute="leading" secondItem="deV-CZ-CQw" secondAttribute="leading" constant="40" id="dzh-sW-5pM"/>
+                                    <constraint firstAttribute="trailing" secondItem="sMD-oX-PbL" secondAttribute="trailing" constant="40" id="jJh-E2-5jc"/>
+                                    <constraint firstItem="xUI-lv-cna" firstAttribute="leading" secondItem="deV-CZ-CQw" secondAttribute="leading" constant="40" id="kdl-Oe-Dwj"/>
+                                    <constraint firstAttribute="trailing" secondItem="5Dx-xN-OxB" secondAttribute="trailing" constant="40" id="koI-RE-Ygd"/>
+                                    <constraint firstAttribute="trailing" secondItem="ULM-Qf-vpL" secondAttribute="trailing" constant="20" id="y8D-Ig-OmJ"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.50196081400000003" green="0.25098040700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="RYv-VP-kbB" secondAttribute="trailing" id="7Ww-Ly-Edf"/>
+                            <constraint firstItem="deV-CZ-CQw" firstAttribute="top" secondItem="Ros-fW-ZFH" secondAttribute="bottom" id="8ka-nj-h52"/>
                             <constraint firstItem="ipK-uS-7uW" firstAttribute="top" secondItem="CCO-L7-l7z" secondAttribute="bottom" id="9Dc-9H-zl1"/>
+                            <constraint firstItem="deV-CZ-CQw" firstAttribute="width" secondItem="s6R-8y-GT5" secondAttribute="width" id="EBY-l0-icK"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Ros-fW-ZFH" secondAttribute="trailing" constant="-16" id="EUG-KO-JZs"/>
                             <constraint firstItem="Ros-fW-ZFH" firstAttribute="leading" secondItem="s6R-8y-GT5" secondAttribute="leadingMargin" constant="-16" id="G8H-gf-xpF"/>
                             <constraint firstItem="RYv-VP-kbB" firstAttribute="top" secondItem="Ros-fW-ZFH" secondAttribute="bottom" id="GSF-Cu-Bf8"/>
@@ -204,7 +257,9 @@
                             <constraint firstItem="ipj-hR-6VK" firstAttribute="centerX" secondItem="s6R-8y-GT5" secondAttribute="centerX" id="Kna-cL-auG"/>
                             <constraint firstItem="ipj-hR-6VK" firstAttribute="top" secondItem="RYv-VP-kbB" secondAttribute="bottom" id="OJL-CP-LwM"/>
                             <constraint firstItem="Ros-fW-ZFH" firstAttribute="top" secondItem="N74-hz-47r" secondAttribute="bottom" id="S1h-kB-JzP"/>
+                            <constraint firstItem="deV-CZ-CQw" firstAttribute="centerX" secondItem="s6R-8y-GT5" secondAttribute="centerX" id="WcM-Y2-CQc"/>
                             <constraint firstItem="CCO-L7-l7z" firstAttribute="top" secondItem="N74-hz-47r" secondAttribute="bottom" id="gJQ-1m-766"/>
+                            <constraint firstItem="ipK-uS-7uW" firstAttribute="top" secondItem="deV-CZ-CQw" secondAttribute="bottom" id="gj3-Sr-EbT"/>
                             <constraint firstItem="ipK-uS-7uW" firstAttribute="top" secondItem="ipj-hR-6VK" secondAttribute="bottom" id="iAz-9J-Cgm"/>
                             <constraint firstItem="ipj-hR-6VK" firstAttribute="width" secondItem="s6R-8y-GT5" secondAttribute="width" id="qbO-3A-Pfh"/>
                         </constraints>
@@ -212,6 +267,7 @@
                     <connections>
                         <outlet property="gameBoardCollectionView" destination="yyY-UM-6hJ" id="0jV-hf-dGe"/>
                         <outlet property="gameBoardContainerView" destination="RYv-VP-kbB" id="DW0-lN-C3r"/>
+                        <outlet property="optionsPauseMenuView" destination="deV-CZ-CQw" id="1PZ-uk-CO9"/>
                         <outlet property="scoreLabel" destination="qu8-Mc-LAb" id="OdN-Jq-DrA"/>
                         <outlet property="timerBeforeGameStartedLabel" destination="394-em-AHb" id="2gU-UA-KEU"/>
                         <outlet property="timerBeforeGameStartedView" destination="CCO-L7-l7z" id="BDt-nN-dWd"/>
@@ -229,7 +285,11 @@
         <image name="highscores-button" width="842" height="201"/>
         <image name="homescreen-background" width="1536" height="2048"/>
         <image name="logo" width="1300" height="800"/>
+        <image name="option-quit-button" width="1070" height="410"/>
+        <image name="option-restart-button" width="980" height="410"/>
+        <image name="option-resume-button" width="1000" height="430"/>
         <image name="options-button" width="842" height="201"/>
+        <image name="options-menu-bg" width="1536" height="2048"/>
         <image name="start-button" width="842" height="201"/>
     </resources>
 </document>

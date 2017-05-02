@@ -21,6 +21,8 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     @IBOutlet weak var timerMainTop: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     
+    @IBOutlet weak var optionsPauseMenuView: UIView!
+    
     let game: Game = Game()
     var config: Config = Config.sharedInstance
     let tileMargin = CGFloat(4.0)
@@ -29,6 +31,7 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        optionsPauseMenuView?.isHidden = true
         setupGameBoard()
         
         // game config
@@ -40,6 +43,17 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    @IBAction func pauseButtonPressed(_ sender: Any) {
+        // TODO: implement game pause
+        optionsPauseMenuView?.isHidden = false
+    }
+    
+    @IBAction func optionsPauseMenuResumeButtonPressed(_ sender: Any) {
+        // TODO: implement game resume
+        optionsPauseMenuView?.isHidden = true
+    }
+    
     
     func setupGameBoard(){
         self.gameBoardCollectionView.delegate = self
