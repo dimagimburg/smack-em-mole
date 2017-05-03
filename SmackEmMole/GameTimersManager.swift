@@ -69,9 +69,10 @@ class GameTimersManager {
     }
     
     func releaseAllListedCellTimers(){
-        for (cellIndex, timer) in hideCellTimers {
-            timer.invalidate()
-            hideCellTimers.removeValue(forKey: cellIndex)
+        for (cellIndex, _) in hideCellTimers {
+            if let removedTimer = hideCellTimers.removeValue(forKey: cellIndex){
+                removedTimer.invalidate()
+            }
             delegate?.listedCellTimerInvalidated(forCellIndex: cellIndex)
         }
     }

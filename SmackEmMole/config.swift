@@ -26,11 +26,12 @@ class Config {
     let timeMinimumMoleShow = 1.5
     let timeMaximumMoleShow = 3.0
     let timeDoubleMode = 5.0
+    let timeQuantityMode = 4.0
     
     // Board
     let numberOfRows = 5;
-    let numberMaxOfColumns: Int = 5;
-    let numberMinOfColumns: Int = 4;
+    let numberMaxOfColumns: Int = 5
+    let numberMinOfColumns: Int = 4
     
     // Score
     let scoreHitMole = 10
@@ -39,6 +40,7 @@ class Config {
     // Game
     let numberSecondsAddSpecialTime = 4 // the number of seconds added when special time mole got hit
     let numberMolesPopSpecialTime = 4 // number of moles to pop on the special time
+    let numberMolesPopSpecialQuantity = 14 // number of moles to pop on the special of extra quantity
     
     let numberSecondsSpecialExtraOn = 5 // number of seconds special extra is on
     let numberMolePerSecondPopExtra = 3 // number of moles to pop per second when extra mode is active

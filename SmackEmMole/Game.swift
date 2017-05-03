@@ -254,7 +254,7 @@ class Game: GameTimersManagerDelegate {
             }
             
             specialTimeMoleHit += 1
-            break;
+            break
         case MoleType.SPECIAL_DOUBLE:
             player.score.setDoubleMode(isDoubleMode: true)
             delegate?.ongoingGameModeChanged(newMode: Config.GameOngoingMode.SPECIAL_DOUBLE)
@@ -262,7 +262,15 @@ class Game: GameTimersManagerDelegate {
                 self?.delegate?.ongoingGameModeChanged(newMode: Config.GameOngoingMode.REGULAR)
                 self?.player.score.setDoubleMode(isDoubleMode: false)
             })
-            break;
+            break
+        case MoleType.SPECIAL_QUANTITY:
+            
+            let delayStartDate = Date().timeIntervalSince(dateGameBegins!).nextUp + 0.5
+            
+            for _ in 0 ... config.numberMolesPopSpecialQuantity - 1 {
+                setRandomMolePopAndHide(withDelay: utils.randomInRange(min: delayStartDate, max: delayStartDate + config.timeQuantityMode))
+            }
+            break
         default:
             moleHitRegular()
             break;
