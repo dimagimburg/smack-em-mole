@@ -13,6 +13,7 @@ class Game: GameTimersManagerDelegate {
     // TODO:
     // 1. naming conventions for functions
     // 2. make order with x and y and use row and column instead or section and row
+    // 3. add game cool fonts for all texts
 
     // more about delegation https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html
     
@@ -173,7 +174,32 @@ class Game: GameTimersManagerDelegate {
     }
     
     public func gamePause(){
+        print("game is going to be paused")
+        // TODO: Pause all task in the game, timers, etc
+        gameTimersPause()
+        delegate?.gamePaused()
+    }
     
+    public func gameResume(){
+        gameTimersResume()
+        delegate?.gameResumed()
+    }
+    
+    public func gameTimersResume(){
+        // resume main timer
+        gameTimersManager.resumeRegularTimer(forKey: timerMainUniqueKey)
+        print("timer main resumed")
+        
+        // resume moles timers
+    }
+    
+    public func gameTimersPause(){
+        // pause main timer
+        gameTimersManager.pauseRegularTimer(forKey: timerMainUniqueKey)
+        print("timer main is paused")
+        
+        // pause mole timers
+        
     }
     
     public func gameStop(){
@@ -292,6 +318,7 @@ protocol SmackEmMoleDelegate {
     func gameMainTimerTick(second: Int)
     func gameStarted()
     func gamePaused()
+    func gameResumed()
     func gameStopped()
     func gameFinished()
     func molePopped(x: Int, y: Int, moleType: MoleType)

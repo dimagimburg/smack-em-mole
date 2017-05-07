@@ -47,11 +47,13 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     @IBAction func pauseButtonPressed(_ sender: Any) {
         // TODO: implement game pause
         optionsPauseMenuView?.isHidden = false
+        game.gamePause()
     }
     
     @IBAction func optionsPauseMenuResumeButtonPressed(_ sender: Any) {
         // TODO: implement game resume
         optionsPauseMenuView?.isHidden = true
+        game.gameResume()
     }
     
     
@@ -125,6 +127,10 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func gamePaused(){
+        print("game paused")
+    }
+    
+    func gameResumed(){
     
     }
     
@@ -173,4 +179,5 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func ongoingGameModeChanged(newMode: Config.GameOngoingMode) {
     
     }
+
 }

@@ -56,6 +56,15 @@ class GameTimersManager {
         regularTimers[key] = regularDelayedIntervalTimer
     }
     
+    func pauseRegularTimer(forKey key: String){
+        regularTimers[key]?.pause()
+    }
+    
+    func resumeRegularTimer(forKey key: String){
+        print("resuming timer : \(key)")
+        regularTimers[key]?.resume()
+    }
+    
     func addLoops(forTimerKey key: String, loopsAmount loops: Int){
         regularTimers[key]?.addLoops(moreLoops: loops)
     }
@@ -88,6 +97,7 @@ class RegularDelayedIntervalTimer {
     let loopFunction: (_ remaining: Int) -> ()
     let callback: () -> ()
     var timer: Timer?
+    var timerPauseDate: Date?
     
     init(key: String, date: Date, delay: Double, loopsToRun: Int, interval: Double, loopFunction: @escaping (_ remaining: Int) -> (), callback: @escaping () -> ()){
         self.key = key
@@ -103,6 +113,26 @@ class RegularDelayedIntervalTimer {
         date.addTimeInterval(delay)
         
         timer = Timer(fire: date, interval: interval, repeats: true, block: { [weak self] (timer) in
+            // TODO: move to separate function - code duplication
+            self?.loopFunction((self?.loops)!)
+            self?.loops -= 1
+            if((self?.loops)! < 0){
+                timer.invalidate()
+                self?.callback()
+            }
+        })
+        
+        RunLoop.main.add(timer!, forMode: RunLoopMode.commonModes)
+    }
+    
+    func pause(){
+        timer?.invalidate()
+        timerPauseDate = Date()
+    }
+    
+    func resume(){
+        timer = Timer(fire: Date().addingTimeInterval(0.5), interval: interval, repeats: true, block: { [weak self] (timer) in
+            // TODO: move to separate function - code duplication
             self?.loopFunction((self?.loops)!)
             self?.loops -= 1
             if((self?.loops)! < 0){
