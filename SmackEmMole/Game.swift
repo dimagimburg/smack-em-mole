@@ -14,6 +14,7 @@ class Game: GameTimersManagerDelegate {
     // 1. naming conventions for functions
     // 2. make order with x and y and use row and column instead or section and row
     // 3. add game cool fonts for all texts
+    // 4. make the random choise of mole type better
 
     // more about delegation https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html
     
