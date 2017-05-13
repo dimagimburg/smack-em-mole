@@ -148,7 +148,7 @@ class Game: GameTimersManagerDelegate {
         timeUntilGameEnds = config.timerGameLength
         gameIsOn = true
         
-        gameTimersManager.addRegularTimer(forKey: timerMainUniqueKey, withDelay: beginGameDelay, loops: timeUntilGameEnds, withInterval: 1.0, forEachIntervalDo: { [weak self] (secondsLeft) in
+        gameTimersManager.addDelayedIntervalTimer(forKey: timerMainUniqueKey, withDelay: beginGameDelay, loops: timeUntilGameEnds, withInterval: 1.0, forEachIntervalDo: { [weak self] (secondsLeft) in
             self?.delegate?.gameMainTimerTick(second: secondsLeft)
             self?.timeUntilGameEnds = secondsLeft
         }, withCallback: { [weak self] in
@@ -285,7 +285,7 @@ class Game: GameTimersManagerDelegate {
         case MoleType.SPECIAL_DOUBLE:
             player.score.setDoubleMode(isDoubleMode: true)
             delegate?.ongoingGameModeChanged(newMode: Config.GameOngoingMode.SPECIAL_DOUBLE)
-            gameTimersManager.addRegularTimer(widthDelay: config.timeDoubleMode, withCallback: { [weak self] in
+            gameTimersManager.addDelayedTimer(widthDelay: config.timeDoubleMode, withCallback: { [weak self] in
                 self?.delegate?.ongoingGameModeChanged(newMode: Config.GameOngoingMode.REGULAR)
                 self?.player.score.setDoubleMode(isDoubleMode: false)
             })
