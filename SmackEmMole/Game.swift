@@ -200,6 +200,7 @@ class Game: GameTimersManagerDelegate {
         print("timer main is paused")
         
         // pause mole timers
+        gameTimersManager.pauseAllCellTimers()
         
     }
     

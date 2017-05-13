@@ -74,6 +74,12 @@ class GameTimersManager: DelayedCellTimerDelegate {
         }
     }
     
+    func pauseAllCellTimers(){
+        for (_, timer) in hideCellTimers {
+            timer.pause()
+        }
+    }
+    
     // delegate DelayedCellTimerDelegate
     
     func popCellTimerBegan(forCellIndex: CellIndex?){
@@ -271,7 +277,7 @@ class DelayedIntervalTimer: DelayedTimer {
             })
             
             RunLoop.main.add(timer!, forMode: RunLoopMode.commonModes)
-            isPaused = true
+            isPaused = false
         }
     }
     
