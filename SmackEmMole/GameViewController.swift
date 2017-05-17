@@ -28,6 +28,7 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     let tileMargin = CGFloat(4.0)
     var cellWidth: CGFloat?
     var cellHeight: CGFloat?
+    var isPaused: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,8 +47,14 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     @IBAction func pauseButtonPressed(_ sender: Any) {
         // TODO: implement game pause
-        optionsPauseMenuView?.isHidden = false
-        game.gamePause()
+        if(!isPaused){
+            optionsPauseMenuView?.isHidden = true
+            game.gamePause()
+        } else {
+            game.gameResume()
+        }
+        isPaused = !isPaused
+        
     }
     
     @IBAction func optionsPauseMenuResumeButtonPressed(_ sender: Any) {

@@ -192,6 +192,8 @@ class Game: GameTimersManagerDelegate {
         print("timer main resumed")
         
         // resume moles timers
+        gameTimersManager.resumeAllCellTimers()
+        //gameTimersManager.resumeAllPopCellTimers()
     }
     
     public func gameTimersPause(){
@@ -201,6 +203,7 @@ class Game: GameTimersManagerDelegate {
         
         // pause mole timers
         gameTimersManager.pauseAllCellTimers()
+        //gameTimersManager.pauseAllPopCellTimers()
         
     }
     

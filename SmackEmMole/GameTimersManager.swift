@@ -12,6 +12,8 @@ class GameTimersManager: DelayedCellTimerDelegate {
 
     var delegate: GameTimersManagerDelegate?
     var anchorDate = Date()
+    let utils = Utils()
+    var popCellTimers = [DelayedCellTimer]()
     var hideCellTimers = [CellIndex: DelayedCellTimer]()
     var regularTimers = [String: DelayedIntervalTimer]()
     
@@ -20,9 +22,22 @@ class GameTimersManager: DelayedCellTimerDelegate {
     }
 
     func addListedCellTimer(withDelay delay: Double, withCallback callback: @escaping () -> (hideCellIndex: CellIndex, withDelay: Double, withCallback: () -> Void)){
-        let cellTimer = DelayedCellTimer(date: anchorDate, delay: delay, callback: callback)
+        let cellTimer = DelayedCellTimer(key: utils.randomString(length: 16), date: anchorDate, delay: delay, callback: callback)
+        popCellTimers.append(cellTimer)
         cellTimer.delegate = self
         cellTimer.start()
+    }
+    
+    func pauseAllPopCellTimers(){
+        for timer in popCellTimers {
+            timer.pause()
+        }
+    }
+    
+    func resumeAllPopCellTimers(){
+        for timer in popCellTimers {
+            timer.resume()
+        }
     }
     
     func addDelayedTimer(widthDelay delay: Double, withCallback callback: @escaping () -> ()){
@@ -80,12 +95,20 @@ class GameTimersManager: DelayedCellTimerDelegate {
         }
     }
     
-    // delegate DelayedCellTimerDelegate
-    
-    func popCellTimerBegan(forCellIndex: CellIndex?){
+    func resumeAllCellTimers(){
+        for (_, timer) in hideCellTimers {
+            timer.resume()
+        }
     }
     
-    func popCellTimerFinished(forCellIndex: CellIndex?){
+    // delegate DelayedCellTimerDelegate
+    
+    func popCellTimerBegan(forKey: String?){
+        print("pop cell began: \(String(describing: forKey))")
+    }
+    
+    func popCellTimerFinished(forKey: String?){
+        print("pop cell began: \(String(describing: forKey))")
     }
     
     func hideCellTimerBegan(forCellIndex: CellIndex, forTimer: DelayedCellTimer){
@@ -180,6 +203,12 @@ class DelayedCellTimer: DelayedTimer {
         super.init(date: date, delay: delay, callback: {})
     }
     
+    convenience init(key: String?, date: Date = Date(), delay: Double = 0, callback: @escaping () -> (hideCellIndex: CellIndex, withDelay: Double, withCallback: () -> Void)){
+        self.init(date: date, delay: delay, callback: callback)
+        self.key = key
+    }
+
+    
     override func start(){
         popDelayedTimer = DelayedTimer(date: date, delay: delay, callback: {
             let (cellIndex, hideTime, hideCallback) = self._callback() // tuple got from game
@@ -191,10 +220,10 @@ class DelayedCellTimer: DelayedTimer {
             self.hideDelayedTimer?.start()
             self.isInHideTimer = true
             self.delegate?.hideCellTimerBegan(forCellIndex: (self.hideCellIndex)!, forTimer: self)
-            self.delegate?.popCellTimerFinished(forCellIndex: self.hideCellIndex)
+            self.delegate?.popCellTimerFinished(forKey: self.key)
         })
         popDelayedTimer?.start()
-        delegate?.popCellTimerBegan(forCellIndex: hideCellIndex)
+        delegate?.popCellTimerBegan(forKey: self.key)
     }
     
     override func pause(){
@@ -220,8 +249,8 @@ class DelayedCellTimer: DelayedTimer {
 }
 
 protocol DelayedCellTimerDelegate {
-    func popCellTimerBegan(forCellIndex: CellIndex?)
-    func popCellTimerFinished(forCellIndex: CellIndex?)
+    func popCellTimerBegan(forKey: String?)
+    func popCellTimerFinished(forKey: String?)
     func hideCellTimerBegan(forCellIndex: CellIndex, forTimer: DelayedCellTimer)
     func hideCellTimerFinished(forCellIndex: CellIndex)
 }
