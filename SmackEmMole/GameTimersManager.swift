@@ -48,6 +48,7 @@ class GameTimersManager {
     }
     
     func pausePopAndHideTimers(){
+        
         for (_, timer) in hideCellTimers {
             timer.pause()
         }
@@ -55,12 +56,15 @@ class GameTimersManager {
         for (_, timer) in popCellTimers {
             timer.pause()
         }
+ 
     }
 
     func resumePopAndHideTimers(){
+        
         for (_, timer) in hideCellTimers {
             timer.resume()
         }
+        
         
         for (_, timer) in popCellTimers {
             timer.resume()
@@ -104,8 +108,6 @@ protocol DelayedTimerProtocol {
     func pause()
     func resume()
 }
-
-class DelayedCellTimer{}
 
 class DelayedTimer: DelayedTimerProtocol {
     /*
@@ -167,8 +169,8 @@ class DelayedTimer: DelayedTimerProtocol {
     
     func resume(){
         if(isPaused && !isStopped){
-            date = Date()
-            timer = Timer(fire: date.addingTimeInterval(afterPauseNewDelay!), interval: 0, repeats: false, block: { (timer) in
+            date = Date().addingTimeInterval(afterPauseNewDelay!)
+            timer = Timer(fire: date, interval: 0, repeats: false, block: { (timer) in
                 if let cb = self.callback {
                     cb()
                 }
@@ -247,6 +249,6 @@ class DelayedIntervalTimer: DelayedTimer {
 }
 
 protocol GameTimersManagerDelegate {
-    func cellPrepare() // for the delegate: prepare freecell and start a pop timer
+    func cellPrepare()
     func cellHid(forCell cell: Cell)
 }

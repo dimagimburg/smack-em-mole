@@ -48,17 +48,17 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     @IBAction func pauseButtonPressed(_ sender: Any) {
         // TODO: implement game pause
         if(!isPaused){
-            optionsPauseMenuView?.isHidden = true
+            optionsPauseMenuView?.isHidden = false
             game.gamePause()
+            isPaused = true
         } else {
             game.gameResume()
         }
-        isPaused = !isPaused
-        
     }
     
     @IBAction func optionsPauseMenuResumeButtonPressed(_ sender: Any) {
         // TODO: implement game resume
+        isPaused = false
         optionsPauseMenuView?.isHidden = true
         game.gameResume()
     }

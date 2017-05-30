@@ -157,7 +157,7 @@ class Game: GameTimersManagerDelegate {
     }
     
     fileprivate func gameFinished(){
-        //gameTimersManager.releaseAllListedCellTimers() // when main timer finished clear all moles popped
+        gameTimersManager.flushAllHideTimers() // when main timer finished clear all moles popped
         gameIsOn = false
         delegate?.gameFinished()
     }
@@ -333,7 +333,7 @@ class Game: GameTimersManagerDelegate {
     // CellTimersManager delegate
     
     func cellPrepare(){
-        if(!isPenaltyMode){
+        if(!isPenaltyMode && gameIsOn){
             
             let cell = self.getRandomCell()
             
