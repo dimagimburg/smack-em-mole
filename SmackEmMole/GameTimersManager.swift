@@ -8,38 +8,65 @@
 
 import Foundation
 
-class GameTimersManager: DelayedCellTimerDelegate {
+class GameTimersManager {
 
     var delegate: GameTimersManagerDelegate?
     var anchorDate = Date()
     let utils = Utils()
-    var popCellTimers = [DelayedCellTimer]()
-    var hideCellTimers = [CellIndex: DelayedCellTimer]()
+    var popCellTimers = [String: DelayedTimer]()
+    var hideCellTimers = [Cell: DelayedTimer]()
     var regularTimers = [String: DelayedIntervalTimer]()
     
     func setAnchorDate(withDate date: Date){
         self.anchorDate = date
     }
-
-    func addListedCellTimer(withDelay delay: Double, withCallback callback: @escaping () -> (hideCellIndex: CellIndex, withDelay: Double, withCallback: () -> Void)){
-        let cellTimer = DelayedCellTimer(key: utils.randomString(length: 16), date: anchorDate, delay: delay, callback: callback)
-        popCellTimers.append(cellTimer)
-        cellTimer.delegate = self
-        cellTimer.start()
+    
+    func addPopCellTimer(withKey key: String, withDelay delay: Double){
+        let popTimer = DelayedTimer(key: key, date: anchorDate, delay: delay, callback: {
+            self.delegate?.cellPrepare()
+            self.popCellTimers.removeValue(forKey: key)
+        })
+        popTimer.start()
+        popCellTimers[key] = popTimer
     }
     
-    func pauseAllPopCellTimers(){
-        for timer in popCellTimers {
+    func addHideCellTimer(forCell cell: Cell, withDelay delay: Double){
+        let hideTimer = DelayedTimer(key: cell.cellIndex, date: Date(), delay: delay, callback: {
+            self.delegate?.cellHid(forCell: cell)
+            self.hideCellTimers.removeValue(forKey: cell)
+        })
+        hideTimer.start()
+        hideCellTimers[cell] = hideTimer
+    }
+    
+    func flushAllHideTimers(){
+        for(cell, timer) in hideCellTimers {
+            timer.stop()
+            self.delegate?.cellHid(forCell: cell)
+            hideCellTimers.removeValue(forKey: cell)
+        }
+    }
+    
+    func pausePopAndHideTimers(){
+        for (_, timer) in hideCellTimers {
+            timer.pause()
+        }
+        
+        for (_, timer) in popCellTimers {
             timer.pause()
         }
     }
-    
-    func resumeAllPopCellTimers(){
-        for timer in popCellTimers {
+
+    func resumePopAndHideTimers(){
+        for (_, timer) in hideCellTimers {
+            timer.resume()
+        }
+        
+        for (_, timer) in popCellTimers {
             timer.resume()
         }
     }
-    
+
     func addDelayedTimer(widthDelay delay: Double, withCallback callback: @escaping () -> ()){
         // regular timer is a regular delayed timer
         let delayedTimer = DelayedTimer(date: Date(), delay: delay, callback: callback)
@@ -70,55 +97,6 @@ class GameTimersManager: DelayedCellTimerDelegate {
         regularTimers[key]?.addLoops(moreLoops: loops)
     }
     
-    func releaseListedCellTimer(releaseFor cellIndex: CellIndex){
-        // TODO: see if the release could be implemented inside this manager class with the help of the delegates
-        
-        if let timer = hideCellTimers[cellIndex] {
-            timer.pause()
-            hideCellTimers.removeValue(forKey: cellIndex)
-            delegate?.listedCellTimerInvalidated(forCellIndex: cellIndex)
-        }
-    }
-    
-    func releaseAllListedCellTimers(){
-        for (cellIndex, _) in hideCellTimers {
-            if let removedTimer = hideCellTimers.removeValue(forKey: cellIndex){
-                removedTimer.pause()
-            }
-            delegate?.listedCellTimerInvalidated(forCellIndex: cellIndex)
-        }
-    }
-    
-    func pauseAllCellTimers(){
-        for (_, timer) in hideCellTimers {
-            timer.pause()
-        }
-    }
-    
-    func resumeAllCellTimers(){
-        for (_, timer) in hideCellTimers {
-            timer.resume()
-        }
-    }
-    
-    // delegate DelayedCellTimerDelegate
-    
-    func popCellTimerBegan(forKey: String?){
-        print("pop cell began: \(String(describing: forKey))")
-    }
-    
-    func popCellTimerFinished(forKey: String?){
-        print("pop cell began: \(String(describing: forKey))")
-    }
-    
-    func hideCellTimerBegan(forCellIndex: CellIndex, forTimer: DelayedCellTimer){
-        self.hideCellTimers[forCellIndex] = forTimer
-    }
-    
-    func hideCellTimerFinished(forCellIndex: CellIndex){
-        self.hideCellTimers.removeValue(forKey: forCellIndex)
-    }
-    
 }
 
 protocol DelayedTimerProtocol {
@@ -127,6 +105,7 @@ protocol DelayedTimerProtocol {
     func resume()
 }
 
+class DelayedCellTimer{}
 
 class DelayedTimer: DelayedTimerProtocol {
     /*
@@ -134,21 +113,22 @@ class DelayedTimer: DelayedTimerProtocol {
      checked to be free of retain cycles by default: https://gist.github.com/dimagimburg/e554bcc3a2f21b6f50f5ecce30169a99 (run on playground)
      */
     
-    var key: String?    // possible of giving a key to identify the timer
+    var key: Any?    // possible of giving a key to identify the timer
     var date: Date
     let delay: Double
-    let callback: () -> ()
+    let callback: (() -> ())?
     var isPaused: Bool = false
+    var isStopped: Bool = false
     var timer: Timer?
     var afterPauseNewDelay: Double?
     
-    init(date: Date = Date(), delay: Double = 0, callback: @escaping () -> ()){
+    init(date: Date = Date(), delay: Double = 0, callback: (() -> ())?){
         self.date = date
         self.delay = delay
         self.callback = callback
     }
     
-    convenience init(key: String?, date: Date = Date(), delay: Double = 0, callback: @escaping () -> ()){
+    convenience init(key: Any?, date: Date = Date(), delay: Double = 0, callback: (() -> ())?){
         self.init(date: date, delay: delay, callback: callback)
         self.key = key
     }
@@ -158,9 +138,12 @@ class DelayedTimer: DelayedTimerProtocol {
     }
     
     func start(){
+        isStopped = false
         date.addTimeInterval(delay)
         timer = Timer(fire: date, interval: 0, repeats: false, block: { (timer) in
-            self.callback()
+            if let cb = self.callback {
+                cb()
+            }
             timer.invalidate()
         })
         
@@ -168,18 +151,27 @@ class DelayedTimer: DelayedTimerProtocol {
     }
     
     func pause(){
-        if(!isPaused){
+        if(!isPaused && !isStopped){
             afterPauseNewDelay = Date().timeIntervalSince(date) * -1 // multiply by minus because difference is negative
             timer?.invalidate()
             isPaused = true
         }
     }
     
+    func stop(){
+        if(!isStopped){
+            timer?.invalidate()
+            isStopped = true
+        }
+    }
+    
     func resume(){
-        if(isPaused){
+        if(isPaused && !isStopped){
             date = Date()
             timer = Timer(fire: date.addingTimeInterval(afterPauseNewDelay!), interval: 0, repeats: false, block: { (timer) in
-                self.callback()
+                if let cb = self.callback {
+                    cb()
+                }
                 timer.invalidate()
             })
             
@@ -187,72 +179,6 @@ class DelayedTimer: DelayedTimerProtocol {
             isPaused = false
         }
     }
-}
-
-class DelayedCellTimer: DelayedTimer {
-    
-    var delegate: DelayedCellTimerDelegate?
-    var hideCellIndex: CellIndex?
-    var _callback: () -> (hideCellIndex: CellIndex, withDelay: Double, withCallback: () -> Void)
-    var isInHideTimer: Bool = false
-    var popDelayedTimer: DelayedTimer?
-    var hideDelayedTimer: DelayedTimer?
-    
-    init(date: Date = Date(), delay: Double = 0, callback: @escaping () -> (hideCellIndex: CellIndex, withDelay: Double, withCallback: () -> Void)){
-        self._callback = callback
-        super.init(date: date, delay: delay, callback: {})
-    }
-    
-    convenience init(key: String?, date: Date = Date(), delay: Double = 0, callback: @escaping () -> (hideCellIndex: CellIndex, withDelay: Double, withCallback: () -> Void)){
-        self.init(date: date, delay: delay, callback: callback)
-        self.key = key
-    }
-
-    
-    override func start(){
-        popDelayedTimer = DelayedTimer(date: date, delay: delay, callback: {
-            let (cellIndex, hideTime, hideCallback) = self._callback() // tuple got from game
-            self.hideCellIndex = cellIndex
-            self.hideDelayedTimer = DelayedTimer(date: Date(), delay: hideTime, callback: { [weak self] in
-                hideCallback()
-                self?.delegate?.hideCellTimerFinished(forCellIndex: (self?.hideCellIndex)!)
-            })
-            self.hideDelayedTimer?.start()
-            self.isInHideTimer = true
-            self.delegate?.hideCellTimerBegan(forCellIndex: (self.hideCellIndex)!, forTimer: self)
-            self.delegate?.popCellTimerFinished(forKey: self.key)
-        })
-        popDelayedTimer?.start()
-        delegate?.popCellTimerBegan(forKey: self.key)
-    }
-    
-    override func pause(){
-        if(!isPaused){
-            hideDelayedTimer?.pause()
-            if(!isInHideTimer){
-                popDelayedTimer?.pause()
-            }
-            isPaused = true
-        }
-    }
-    
-    override func resume(){
-        if(isPaused){
-            if(!isInHideTimer){
-                popDelayedTimer?.resume()
-            }
-            hideDelayedTimer?.resume()
-            isPaused = false
-        }
-    }
-    
-}
-
-protocol DelayedCellTimerDelegate {
-    func popCellTimerBegan(forKey: String?)
-    func popCellTimerFinished(forKey: String?)
-    func hideCellTimerBegan(forCellIndex: CellIndex, forTimer: DelayedCellTimer)
-    func hideCellTimerFinished(forCellIndex: CellIndex)
 }
 
 class DelayedIntervalTimer: DelayedTimer {
@@ -271,7 +197,7 @@ class DelayedIntervalTimer: DelayedTimer {
         super.init(date: date, delay: delay, callback: callback)
     }
     
-    convenience init(key: String?, date: Date, delay: Double, loopsToRun loops: Int, interval: Double, loopFunction: @escaping (_ remaining: Int) -> (), callback: @escaping () -> ()){
+    convenience init(key: Any?, date: Date, delay: Double, loopsToRun loops: Int, interval: Double, loopFunction: @escaping (_ remaining: Int) -> (), callback: @escaping () -> ()){
         self.init(date: date, delay: delay, loopsToRun: loops, interval: interval, loopFunction: loopFunction, callback: callback)
         self.key = key
     }
@@ -285,7 +211,9 @@ class DelayedIntervalTimer: DelayedTimer {
             self?.loops -= 1
             if((self?.loops)! < 0){
                 timer.invalidate()
-                self?.callback()
+                if let cb = self?.callback {
+                    cb()
+                }
             }
         })
         
@@ -301,7 +229,9 @@ class DelayedIntervalTimer: DelayedTimer {
                 self?.loops -= 1
                 if((self?.loops)! < 0){
                     timer.invalidate()
-                    self?.callback()
+                    if let cb = self?.callback {
+                        cb()
+                    }
                 }
             })
             
@@ -317,5 +247,6 @@ class DelayedIntervalTimer: DelayedTimer {
 }
 
 protocol GameTimersManagerDelegate {
-    func listedCellTimerInvalidated(forCellIndex cellIndex: CellIndex)
+    func cellPrepare() // for the delegate: prepare freecell and start a pop timer
+    func cellHid(forCell cell: Cell)
 }

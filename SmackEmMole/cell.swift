@@ -22,9 +22,17 @@ struct CellIndex: Hashable {
     }
 }
 
-class Cell {
+class Cell: Hashable {
     var mole: Mole? = nil
     var cellIndex: CellIndex
+    
+    var hashValue: Int {
+        return cellIndex.hashValue
+    }
+    
+    static func ==(lhs: Cell, rhs: Cell) -> Bool {
+        return lhs.cellIndex == rhs.cellIndex
+    }
     
     init(cellIndex: CellIndex){
         self.cellIndex = cellIndex

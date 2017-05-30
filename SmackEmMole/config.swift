@@ -27,6 +27,7 @@ class Config {
     let timeMaximumMoleShow = 3.0
     let timeDoubleMode = 5.0
     let timeQuantityMode = 4.0
+    let timePenaltyMode = 3.0
     
     // Board
     let numberOfRows = 5;

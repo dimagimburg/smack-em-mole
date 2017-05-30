@@ -15,6 +15,7 @@ class Game: GameTimersManagerDelegate {
     // 2. make order with x and y and use row and column instead or section and row
     // 3. add game cool fonts for all texts
     // 4. make the random choise of mole type better
+    // 5. set the penalty mode also on the delegate so we can catch it in the view controller
 
     // more about delegation https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html
     
@@ -27,6 +28,7 @@ class Game: GameTimersManagerDelegate {
     var currentOngoingGameMode = Config.GameOngoingMode.REGULAR
     var gameTimersManager = GameTimersManager()
     var gameIsOn: Bool = false
+    var isPenaltyMode = false
     
     var dateGameBegins: Date?
     var timeUntilGameEnds: Int
@@ -89,22 +91,12 @@ class Game: GameTimersManagerDelegate {
     
     fileprivate func addMolePopTimers(){
         for i in 0...popTimes.count-1 {
-            setRandomMolePopAndHide(withDelay: popTimes[i])
+            addPopTimer(withDelay: popTimes[i])
         }
     }
     
-    fileprivate func setRandomMolePopAndHide(withDelay delay: Double){
-        gameTimersManager.addListedCellTimer(withDelay: delay, withCallback: {
-            let cell = self.getRandomCell()
-            self.delegate?.molePopped(x: cell.cellIndex.x, y: cell.cellIndex.y, moleType: (cell.mole?.type)!)
-            let timeMoleToBeShown = self.utils.randomInRange(min: self.config.timeMinimumMoleShow, max: self.config.timeMaximumMoleShow)
-            
-            return (cell.cellIndex, timeMoleToBeShown, { [weak self] in
-                cell.setMole(moleType: nil)
-                self?.freeCells.append(cell)
-                self?.moleHide(cell: cell)
-            })
-        })
+    fileprivate func addPopTimer(withDelay delay: Double){
+        gameTimersManager.addPopCellTimer(withKey: utils.randomString(length: 16), withDelay: delay)
     }
     
     fileprivate func getRandomCell() -> Cell {
@@ -165,7 +157,7 @@ class Game: GameTimersManagerDelegate {
     }
     
     fileprivate func gameFinished(){
-        gameTimersManager.releaseAllListedCellTimers() // when main timer finished clear all moles popped
+        //gameTimersManager.releaseAllListedCellTimers() // when main timer finished clear all moles popped
         gameIsOn = false
         delegate?.gameFinished()
     }
@@ -192,8 +184,7 @@ class Game: GameTimersManagerDelegate {
         print("timer main resumed")
         
         // resume moles timers
-        gameTimersManager.resumeAllCellTimers()
-        //gameTimersManager.resumeAllPopCellTimers()
+        gameTimersManager.resumePopAndHideTimers()
     }
     
     public func gameTimersPause(){
@@ -202,8 +193,7 @@ class Game: GameTimersManagerDelegate {
         print("timer main is paused")
         
         // pause mole timers
-        gameTimersManager.pauseAllCellTimers()
-        //gameTimersManager.pauseAllPopCellTimers()
+        gameTimersManager.pausePopAndHideTimers()
         
     }
     
@@ -220,11 +210,21 @@ class Game: GameTimersManagerDelegate {
     }
     
     public func moleHide(cell: Cell){
-        delegate?.moleHid(x: cell.cellIndex.x, y: cell.cellIndex.y)
+        
+        delegate?.moleHid(
+            x: cell.cellIndex.x,
+            y: cell.cellIndex.y
+        )
+        
     }
     
     public func moleHide(forCellIndex cellIndex: CellIndex){
-        delegate?.moleHid(x: cellIndex.x, y: cellIndex.y)
+        
+        delegate?.moleHid(
+            x: cellIndex.x,
+            y: cellIndex.y
+        )
+        
     }
     
     public func cellPressed(x: Int, y: Int){
@@ -246,8 +246,14 @@ class Game: GameTimersManagerDelegate {
                 moleHitMalicious()
             }
             
-            // release to all timers running right now, sort of board clearance as a penalty for hitting malicious mole
-            gameTimersManager.releaseAllListedCellTimers()
+            isPenaltyMode = true
+            
+            gameTimersManager.addDelayedTimer(widthDelay: config.timePenaltyMode, withCallback: {
+                self.isPenaltyMode = false
+            })
+            
+            // flush all timers running right now, sort of board clearance as a penalty for hitting malicious mole
+            gameTimersManager.flushAllHideTimers()
             break
         case MoleType.REGULAR:
             moleHitRegular()
@@ -272,7 +278,11 @@ class Game: GameTimersManagerDelegate {
         switch moleType {
         case MoleType.SPECIAL_TIME:
             // timer clock increase
-            gameTimersManager.addLoops(forTimerKey: timerMainUniqueKey, loopsAmount: config.numberSecondsAddSpecialTime)
+            
+            gameTimersManager.addLoops(
+                forTimerKey: timerMainUniqueKey,
+                loopsAmount: config.numberSecondsAddSpecialTime
+            )
             
             // pop random moles accordingly
             for _ in 0 ... config.numberMolesPopSpecialTime {
@@ -281,7 +291,7 @@ class Game: GameTimersManagerDelegate {
                     Double(specialTimeMoleHit * config.numberSecondsAddSpecialTime) + // time special hit
                     utils.randomInRange(min: 0.0, max: Double(config.numberSecondsAddSpecialTime)) // random range
                 
-                setRandomMolePopAndHide(withDelay: delay)
+                gameTimersManager.addPopCellTimer(withKey: utils.randomString(length: 16), withDelay: delay)
             }
             
             specialTimeMoleHit += 1
@@ -289,17 +299,29 @@ class Game: GameTimersManagerDelegate {
         case MoleType.SPECIAL_DOUBLE:
             player.score.setDoubleMode(isDoubleMode: true)
             delegate?.ongoingGameModeChanged(newMode: Config.GameOngoingMode.SPECIAL_DOUBLE)
-            gameTimersManager.addDelayedTimer(widthDelay: config.timeDoubleMode, withCallback: { [weak self] in
-                self?.delegate?.ongoingGameModeChanged(newMode: Config.GameOngoingMode.REGULAR)
-                self?.player.score.setDoubleMode(isDoubleMode: false)
-            })
+            
+            gameTimersManager.addDelayedTimer(
+                widthDelay: config.timeDoubleMode,
+                withCallback: { [weak self] in
+                    self?.delegate?.ongoingGameModeChanged(newMode: Config.GameOngoingMode.REGULAR)
+                    self?.player.score.setDoubleMode(isDoubleMode: false)
+                }
+            )
             break
         case MoleType.SPECIAL_QUANTITY:
             
             let delayStartDate = Date().timeIntervalSince(dateGameBegins!).nextUp + 0.5
             
             for _ in 0 ... config.numberMolesPopSpecialQuantity - 1 {
-                setRandomMolePopAndHide(withDelay: utils.randomInRange(min: delayStartDate, max: delayStartDate + config.timeQuantityMode))
+                
+                gameTimersManager.addPopCellTimer(
+                    withKey: utils.randomString(length: 16),
+                    withDelay: utils.randomInRange(
+                        min: delayStartDate,
+                        max: delayStartDate + config.timeQuantityMode
+                    )
+                )
+                
             }
             break
         default:
@@ -310,8 +332,34 @@ class Game: GameTimersManagerDelegate {
     
     // CellTimersManager delegate
     
-    func listedCellTimerInvalidated(forCellIndex cellIndex: CellIndex){
-        moleHide(forCellIndex: cellIndex)
+    func cellPrepare(){
+        if(!isPenaltyMode){
+            
+            let cell = self.getRandomCell()
+            
+            let timeMoleToBeShown = self.utils.randomInRange(
+                min: self.config.timeMinimumMoleShow,
+                max: self.config.timeMaximumMoleShow
+            )
+            
+            gameTimersManager.addHideCellTimer(
+                forCell: cell,
+                withDelay: timeMoleToBeShown
+            )
+            
+            self.delegate?.molePopped(
+                x: cell.cellIndex.x,
+                y: cell.cellIndex.y,
+                moleType: (cell.mole?.type)!
+            )
+
+        }
+    }
+    
+    func cellHid(forCell cell: Cell){
+        cell.setMole(moleType: nil)
+        self.freeCells.append(cell)
+        self.moleHide(cell: cell)
     }
     
 }
