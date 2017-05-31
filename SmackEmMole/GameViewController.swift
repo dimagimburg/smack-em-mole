@@ -16,7 +16,6 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     
     @IBOutlet weak var timerBeforeGameStartedView: UIView!
-    @IBOutlet weak var timerBeforeGameStartedLabel: UILabel!
     
     @IBOutlet weak var timerMainTop: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
@@ -32,7 +31,6 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        optionsPauseMenuView?.isHidden = true
         setupGameBoard()
         
         // game config
@@ -48,18 +46,16 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     @IBAction func pauseButtonPressed(_ sender: Any) {
         // TODO: implement game pause
         if(!isPaused){
-            optionsPauseMenuView?.isHidden = false
+            animateOptionsMenuOpen()
             game.gamePause()
             isPaused = true
-        } else {
-            game.gameResume()
         }
     }
     
     @IBAction func optionsPauseMenuResumeButtonPressed(_ sender: Any) {
         // TODO: implement game resume
         isPaused = false
-        optionsPauseMenuView?.isHidden = true
+        animateOptionsMenuClose()
         game.gameResume()
     }
     
@@ -110,14 +106,82 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
     }
     
+    // Animations
+    
+    func animateOptionsMenuOpen(){
+        
+        UIView.transition(
+            with: optionsPauseMenuView,
+            duration: 0.25,
+            options: [.transitionCrossDissolve],
+            animations: {
+                self.optionsPauseMenuView?.isHidden = false
+            },
+            completion: { _ in
+        
+            }
+        )
+        
+    }
+    
+    func animateOptionsMenuClose(){
+        
+        UIView.transition(
+            with: optionsPauseMenuView,
+            duration: 0.25,
+            options: [.transitionCrossDissolve],
+            animations: {
+                self.optionsPauseMenuView?.isHidden = true
+            },
+            completion: { _ in
+            
+            }
+        )
+        
+    }
+    
+    func animateCounterLabelToBeforeStartTimerView(withText text: String){
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+        label.textAlignment = .center
+        label.alpha = 0
+        label.font = UIFont(name: "ShowcardGothic-Reg", size: 50)
+        label.text = text
+        label.center = CGPoint(x: timerBeforeGameStartedView.frame.width / 2, y: timerBeforeGameStartedView.frame.height / 2)
+        timerBeforeGameStartedView.addSubview(label)
+        label.transform = CGAffineTransform(scaleX: 0, y: 0)
+        
+        UIView.animate(
+            withDuration: 0.25,
+            animations: {
+                label.transform = CGAffineTransform(scaleX: 1, y: 1)
+                label.alpha = 1
+            },
+            completion: { _ in
+                UIView.animate(
+                    withDuration: 0.75,
+                    animations: {
+                        label.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+                        label.alpha = 0.2
+                    },
+                    completion: { _ in
+                        label.removeFromSuperview()
+                    }
+                )
+            }
+        )
+    }
+
+    
     // SmackEmMole delegation
     
     func gameBeforeTimerStarted(secondsToZero: Int){
-        timerBeforeGameStartedLabel.text = String(secondsToZero)
+        
     }
     
     func gameBeforeTimerSecondTick(second: Int){
-        timerBeforeGameStartedLabel.text = String(second)
+        print("that")
+        //timerBeforeGameStartedLabel.text = String(second)
+        animateCounterLabelToBeforeStartTimerView(withText: String(second))
     }
     
     func gameBeforeTimerFinished(){

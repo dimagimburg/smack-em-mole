@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="SHOWG.TTF">
+            <string>ShowcardGothic-Reg</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -94,13 +99,13 @@
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RW7-qV-gUO">
                                         <rect key="frame" x="16" y="22.5" width="0.0" height="0.0"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" name="ShowcardGothic-Reg" family="Showcard Gothic" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qu8-Mc-LAb">
-                                        <rect key="frame" x="240" y="11" width="64" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <rect key="frame" x="233" y="13" width="71" height="17"/>
+                                        <fontDescription key="fontDescription" name="ShowcardGothic-Reg" family="Showcard Gothic" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -172,20 +177,23 @@
                                             </collectionViewCell>
                                         </cells>
                                     </collectionView>
-                                    <view alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CCO-L7-l7z" userLabel="BeforeStartTimerView">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CCO-L7-l7z" userLabel="BeforeStartTimerView">
                                         <rect key="frame" x="0.0" y="-44" width="320" height="548"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BeforeGameTimer" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="394-em-AHb">
-                                                <rect key="frame" x="80" y="262" width="161" height="24"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
+                                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tib-8g-KOb">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="UFE-0S-xhD">
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </view>
+                                                <blurEffect style="light"/>
+                                            </visualEffectView>
                                         </subviews>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstItem="394-em-AHb" firstAttribute="centerX" secondItem="CCO-L7-l7z" secondAttribute="centerX" id="IKW-4F-KyS"/>
-                                            <constraint firstItem="394-em-AHb" firstAttribute="centerY" secondItem="CCO-L7-l7z" secondAttribute="centerY" id="MYX-JY-13t"/>
+                                            <constraint firstItem="Tib-8g-KOb" firstAttribute="leading" secondItem="CCO-L7-l7z" secondAttribute="leading" id="5oo-uQ-yMZ"/>
+                                            <constraint firstItem="Tib-8g-KOb" firstAttribute="height" secondItem="CCO-L7-l7z" secondAttribute="height" id="b5d-hp-wV5"/>
+                                            <constraint firstItem="Tib-8g-KOb" firstAttribute="top" secondItem="CCO-L7-l7z" secondAttribute="top" id="rm9-t4-zZp"/>
+                                            <constraint firstItem="Tib-8g-KOb" firstAttribute="width" secondItem="CCO-L7-l7z" secondAttribute="width" id="yxq-bb-I8W"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -195,9 +203,17 @@
                                 </constraints>
                                 <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="deV-CZ-CQw" userLabel="OptionsPauseMenuView">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="deV-CZ-CQw" userLabel="OptionsPauseMenuView">
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <subviews>
+                                    <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ujj-Eb-X1S">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="3sB-zB-uWM">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </view>
+                                        <blurEffect style="light"/>
+                                    </visualEffectView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="options-menu-bg" translatesAutoresizingMaskIntoConstraints="NO" id="ULM-Qf-vpL" userLabel="OptionsPauseMenuBackground">
                                         <rect key="frame" x="20" y="20" width="280" height="420"/>
                                     </imageView>
@@ -229,17 +245,20 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.72336632013320923" green="0.61445930412027594" blue="0.40005254107122401" alpha="0.56686108732876717" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="5Dx-xN-OxB" firstAttribute="top" secondItem="sMD-oX-PbL" secondAttribute="bottom" constant="10" id="8Hs-f3-eKj"/>
                                     <constraint firstItem="ULM-Qf-vpL" firstAttribute="top" secondItem="deV-CZ-CQw" secondAttribute="top" constant="20" id="D64-1z-a6a"/>
+                                    <constraint firstItem="ujj-Eb-X1S" firstAttribute="width" secondItem="deV-CZ-CQw" secondAttribute="width" id="DgC-eA-sBz"/>
                                     <constraint firstAttribute="bottom" secondItem="ULM-Qf-vpL" secondAttribute="bottom" constant="64" id="IyQ-cF-0Cg"/>
                                     <constraint firstItem="sMD-oX-PbL" firstAttribute="top" secondItem="xUI-lv-cna" secondAttribute="bottom" constant="10" id="L42-lx-7YH"/>
+                                    <constraint firstItem="ujj-Eb-X1S" firstAttribute="leading" secondItem="deV-CZ-CQw" secondAttribute="leading" id="MgG-8K-bm4"/>
                                     <constraint firstAttribute="bottom" secondItem="5Dx-xN-OxB" secondAttribute="bottom" constant="84" id="Qsw-cW-Pch"/>
+                                    <constraint firstItem="ujj-Eb-X1S" firstAttribute="top" secondItem="deV-CZ-CQw" secondAttribute="top" id="RKt-7l-YeB"/>
                                     <constraint firstItem="ULM-Qf-vpL" firstAttribute="leading" secondItem="deV-CZ-CQw" secondAttribute="leading" constant="20" id="YVE-WO-KVp"/>
                                     <constraint firstAttribute="trailing" secondItem="xUI-lv-cna" secondAttribute="trailing" constant="40" id="cqg-4q-WFf"/>
                                     <constraint firstItem="sMD-oX-PbL" firstAttribute="leading" secondItem="deV-CZ-CQw" secondAttribute="leading" constant="40" id="d5K-La-lw1"/>
                                     <constraint firstItem="5Dx-xN-OxB" firstAttribute="leading" secondItem="deV-CZ-CQw" secondAttribute="leading" constant="40" id="dzh-sW-5pM"/>
+                                    <constraint firstItem="ujj-Eb-X1S" firstAttribute="height" secondItem="deV-CZ-CQw" secondAttribute="height" id="fq6-Sf-Ldo"/>
                                     <constraint firstAttribute="trailing" secondItem="sMD-oX-PbL" secondAttribute="trailing" constant="40" id="jJh-E2-5jc"/>
                                     <constraint firstItem="xUI-lv-cna" firstAttribute="leading" secondItem="deV-CZ-CQw" secondAttribute="leading" constant="40" id="kdl-Oe-Dwj"/>
                                     <constraint firstAttribute="trailing" secondItem="5Dx-xN-OxB" secondAttribute="trailing" constant="40" id="koI-RE-Ygd"/>
@@ -272,7 +291,6 @@
                         <outlet property="gameBoardContainerView" destination="RYv-VP-kbB" id="DW0-lN-C3r"/>
                         <outlet property="optionsPauseMenuView" destination="deV-CZ-CQw" id="1PZ-uk-CO9"/>
                         <outlet property="scoreLabel" destination="qu8-Mc-LAb" id="OdN-Jq-DrA"/>
-                        <outlet property="timerBeforeGameStartedLabel" destination="394-em-AHb" id="2gU-UA-KEU"/>
                         <outlet property="timerBeforeGameStartedView" destination="CCO-L7-l7z" id="BDt-nN-dWd"/>
                         <outlet property="timerMainTop" destination="RW7-qV-gUO" id="gGV-3z-zQi"/>
                     </connections>
