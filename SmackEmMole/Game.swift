@@ -13,9 +13,8 @@ class Game: GameTimersManagerDelegate {
     // TODO:
     // 1. naming conventions for functions
     // 2. make order with x and y and use row and column instead or section and row
-    // 3. add game cool fonts for all texts
-    // 4. make the random choise of mole type better
-    // 5. set the penalty mode also on the delegate so we can catch it in the view controller
+    // 3. make the random choise of mole type better
+    // 4. set the penalty mode also on the delegate so we can catch it in the view controller
 
     // more about delegation https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html
     
@@ -209,20 +208,12 @@ class Game: GameTimersManagerDelegate {
     
     }
     
-    public func moleHide(cell: Cell){
-        
+    public func moleHide(cell: Cell, isHit: Bool, moleType: MoleType?){
         delegate?.moleHid(
             x: cell.cellIndex.x,
-            y: cell.cellIndex.y
-        )
-        
-    }
-    
-    public func moleHide(forCellIndex cellIndex: CellIndex){
-        
-        delegate?.moleHid(
-            x: cellIndex.x,
-            y: cellIndex.y
+            y: cell.cellIndex.y,
+            isHit: isHit,
+            moleType: moleType
         )
         
     }
@@ -230,17 +221,18 @@ class Game: GameTimersManagerDelegate {
     public func cellPressed(x: Int, y: Int){
         let cellPressed = gameBoard[y][x]
         if(cellPressed.mole != nil){
-            moleHit(moleType: (cellPressed.mole?.type)!)
+            moleHit(cellPressed: cellPressed)
+        } else {
+            cellPressed.mole = nil
+            moleHide(cell: cellPressed, isHit: false, moleType: nil)
         }
-        cellPressed.mole = nil
-        
-        // this is not right, only for debug purposes, the right handle should be in the if statement above
-        // and releasing the timer properly.
-        moleHide(cell: cellPressed)
     }
     
-    public func moleHit(moleType: MoleType){
-        switch moleType {
+    public func moleHit(cellPressed: Cell){
+        // TODO: check if cellPressed.mole = nil even needed....
+        
+        switch cellPressed.mole!.type {
+            
         case MoleType.MALICIOUS:
             if(player.score.score > 0){
                 moleHitMalicious()
@@ -254,14 +246,22 @@ class Game: GameTimersManagerDelegate {
             
             // flush all timers running right now, sort of board clearance as a penalty for hitting malicious mole
             gameTimersManager.flushAllHideTimers()
+            cellPressed.mole = nil
+            moleHide(cell: cellPressed, isHit: true, moleType: MoleType.MALICIOUS)
             break
+            
         case MoleType.REGULAR:
             moleHitRegular()
+            cellPressed.mole = nil
+            moleHide(cell: cellPressed, isHit: true, moleType: MoleType.REGULAR)
             break
+            
         default:
-            moleHitSpecial(moleType: moleType)
+            moleHitSpecial(cellPressed: cellPressed)
             break
         }
+        
+        
         
         delegate?.scoreChanged(score: player.score)
     }
@@ -274,8 +274,9 @@ class Game: GameTimersManagerDelegate {
         player.score.hitRegularMole()
     }
     
-    public func moleHitSpecial(moleType: MoleType){
-        switch moleType {
+    public func moleHitSpecial(cellPressed: Cell){
+        switch cellPressed.mole!.type {
+            
         case MoleType.SPECIAL_TIME:
             // timer clock increase
             
@@ -295,7 +296,11 @@ class Game: GameTimersManagerDelegate {
             }
             
             specialTimeMoleHit += 1
+            
+            cellPressed.mole = nil
+            moleHide(cell: cellPressed, isHit: true, moleType: MoleType.SPECIAL_TIME)
             break
+            
         case MoleType.SPECIAL_DOUBLE:
             player.score.setDoubleMode(isDoubleMode: true)
             delegate?.ongoingGameModeChanged(newMode: Config.GameOngoingMode.SPECIAL_DOUBLE)
@@ -307,7 +312,11 @@ class Game: GameTimersManagerDelegate {
                     self?.player.score.setDoubleMode(isDoubleMode: false)
                 }
             )
+            
+            cellPressed.mole = nil
+            moleHide(cell: cellPressed, isHit: true, moleType: MoleType.SPECIAL_DOUBLE)
             break
+            
         case MoleType.SPECIAL_QUANTITY:
             
             let delayStartDate = Date().timeIntervalSince(dateGameBegins!).nextUp + 0.5
@@ -323,11 +332,18 @@ class Game: GameTimersManagerDelegate {
                 )
                 
             }
+            
+            cellPressed.mole = nil
+            moleHide(cell: cellPressed, isHit: true, moleType: MoleType.SPECIAL_QUANTITY)
             break
+            
         default:
             moleHitRegular()
+            cellPressed.mole = nil
+            moleHide(cell: cellPressed, isHit: true, moleType: MoleType.REGULAR)
             break;
         }
+        
     }
     
     // CellTimersManager delegate
@@ -359,7 +375,7 @@ class Game: GameTimersManagerDelegate {
     func cellHid(forCell cell: Cell){
         cell.setMole(moleType: nil)
         self.freeCells.append(cell)
-        self.moleHide(cell: cell)
+        self.moleHide(cell: cell, isHit: false, moleType: nil)
     }
     
 }
@@ -375,7 +391,7 @@ protocol SmackEmMoleDelegate {
     func gameStopped()
     func gameFinished()
     func molePopped(x: Int, y: Int, moleType: MoleType)
-    func moleHid(x: Int, y: Int)
+    func moleHid(x: Int, y: Int, isHit: Bool, moleType: MoleType?)
     func scoreChanged(score: Score)
     func ongoingGameModeChanged(newMode: Config.GameOngoingMode)
 }

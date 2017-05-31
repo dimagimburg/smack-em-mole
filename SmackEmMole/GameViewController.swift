@@ -23,6 +23,7 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     @IBOutlet weak var optionsPauseMenuView: UIView!
     
     let game: Game = Game()
+    let utils = Utils()
     var config: Config = Config.sharedInstance
     let tileMargin = CGFloat(4.0)
     var cellWidth: CGFloat?
@@ -158,7 +159,7 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             },
             completion: { _ in
                 UIView.animate(
-                    withDuration: 0.75,
+                    withDuration: 0.70,
                     animations: {
                         label.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
                         label.alpha = 0.2
@@ -170,6 +171,65 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             }
         )
     }
+    
+    func animateStartGameLabel(){
+        // here set animation for a GO! label appears when game starts
+    }
+    
+    func animateMoleHit(x: Int, y: Int, moleType: MoleType?){
+        if let moleType = moleType {
+            
+            let index = IndexPath(row: x, section: y)
+            let moleView = gameBoardCollectionView.cellForItem(at: index) as! MoleCollectionViewCell
+            let moleHitImageView = UIImageView()
+            
+            switch moleType {
+            case MoleType.REGULAR:
+                moleHitImageView.image = UIImage(named: "mole_regular")
+                break;
+            case MoleType.MALICIOUS:
+                moleHitImageView.image = UIImage(named: "mole_malicious")
+                break;
+            case MoleType.SPECIAL_DOUBLE:
+                moleHitImageView.image = UIImage(named: "mole_special_double")
+                break;
+            case MoleType.SPECIAL_QUANTITY:
+                moleHitImageView.image = UIImage(named: "mole_special_extra")
+                break;
+            case MoleType.SPECIAL_TIME:
+                moleHitImageView.image = UIImage(named: "mole_special_time")
+                break;
+            }
+            
+            moleHitImageView.frame = CGRect(
+                x: moleView.frame.origin.x,
+                y: moleView.frame.origin.y,
+                width: moleView.frame.width,
+                height: 45
+            )
+            
+            gameBoardContainerView.addSubview(moleHitImageView)
+            
+            let randomAngle = utils.randomInRange(min: 90.0, max: 360.0) * (Double.pi / 180.0) * (utils.randomInRange(min: 0.0, max: 1.0) > 0.5 ? 1 : -1)
+        
+            UIView.animateKeyframes(
+                withDuration: 0.3,
+                delay: 0,
+                options: [
+                    .calculationModeCubic
+                ],
+                animations: {
+                    moleHitImageView.transform = CGAffineTransform(
+                        translationX: CGFloat(self.utils.randomInRange(min: 0.0, max: Double(self.gameBoardContainerView.frame.width))),
+                        y: CGFloat(self.utils.randomInRange(min: 0.0, max: Double(self.gameBoardContainerView.frame.width)))
+                        ).concatenating(CGAffineTransform(rotationAngle: CGFloat(randomAngle)))
+                },
+                completion: { _ in
+                    moleHitImageView.removeFromSuperview()
+                }
+            )
+        }
+    }
 
     
     // SmackEmMole delegation
@@ -179,8 +239,6 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func gameBeforeTimerSecondTick(second: Int){
-        print("that")
-        //timerBeforeGameStartedLabel.text = String(second)
         animateCounterLabelToBeforeStartTimerView(withText: String(second))
     }
     
@@ -195,6 +253,7 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func gameStarted(){
         print("game started")
+        animateStartGameLabel()
     }
     
     func gamePaused(){
@@ -202,7 +261,7 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func gameResumed(){
-    
+        print("game resumed")
     }
     
     func gameStopped(){
@@ -237,8 +296,13 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
     }
 
-    func moleHid(x: Int, y: Int) {
+    func moleHid(x: Int, y: Int, isHit: Bool, moleType: MoleType?) {
         let index = IndexPath(row: x, section: y)
+        
+        if(isHit){
+            animateMoleHit(x: x, y: y, moleType: moleType)
+        }
+        
         let moleView = gameBoardCollectionView.cellForItem(at: index) as! MoleCollectionViewCell
         moleView.cellImageView.image = UIImage(named: "mole_sand")
     }
