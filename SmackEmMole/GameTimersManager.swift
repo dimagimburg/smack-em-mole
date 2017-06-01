@@ -10,30 +10,34 @@ import Foundation
 
 class GameTimersManager {
 
-    var delegate: GameTimersManagerDelegate?
+    weak var delegate: GameTimersManagerDelegate?
     var anchorDate = Date()
     let utils = Utils()
     var popCellTimers = [String: DelayedTimer]()
     var hideCellTimers = [Cell: DelayedTimer]()
     var regularTimers = [String: DelayedIntervalTimer]()
     
+    deinit {
+        print("deinit gametimersmanager")
+    }
+    
     func setAnchorDate(withDate date: Date){
         self.anchorDate = date
     }
     
     func addPopCellTimer(withKey key: String, withDelay delay: Double){
-        let popTimer = DelayedTimer(key: key, date: anchorDate, delay: delay, callback: {
-            self.delegate?.cellPrepare()
-            self.popCellTimers.removeValue(forKey: key)
+        let popTimer = DelayedTimer(key: key, date: anchorDate, delay: delay, callback: { [weak self] in
+            self?.delegate?.cellPrepare()
+            self?.popCellTimers.removeValue(forKey: key)
         })
         popTimer.start()
         popCellTimers[key] = popTimer
     }
     
     func addHideCellTimer(forCell cell: Cell, withDelay delay: Double){
-        let hideTimer = DelayedTimer(key: cell.cellIndex, date: Date(), delay: delay, callback: {
-            self.delegate?.cellHid(forCell: cell)
-            self.hideCellTimers.removeValue(forKey: cell)
+        let hideTimer = DelayedTimer(key: cell.cellIndex, date: Date(), delay: delay, callback: { [weak self] in
+            self?.delegate?.cellHid(forCell: cell)
+            self?.hideCellTimers.removeValue(forKey: cell)
         })
         hideTimer.start()
         hideCellTimers[cell] = hideTimer
@@ -248,7 +252,7 @@ class DelayedIntervalTimer: DelayedTimer {
     
 }
 
-protocol GameTimersManagerDelegate {
+protocol GameTimersManagerDelegate: class {
     func cellPrepare()
     func cellHid(forCell cell: Cell)
 }
