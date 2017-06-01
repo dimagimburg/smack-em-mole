@@ -22,7 +22,7 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     @IBOutlet weak var optionsPauseMenuView: UIView!
     
-    let game: Game = Game()
+    var game: Game? = Game()
     let utils = Utils()
     var config: Config = Config.sharedInstance
     let tileMargin = CGFloat(4.0)
@@ -30,13 +30,18 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var cellHeight: CGFloat?
     var isPaused: Bool = false
     
+    deinit{
+        print("game view controller dismissed")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupGameBoard()
         
         // game config
-        game.delegate = self
-        game.gameStart()
+        game!.delegate = self
+        game!.gameStart()
     }
 
     override func didReceiveMemoryWarning() {
@@ -48,16 +53,28 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         // TODO: implement game pause
         if(!isPaused){
             animateOptionsMenuOpen()
-            game.gamePause()
+            game!.gamePause()
             isPaused = true
         }
+    }
+    
+    
+    @IBAction func quitButtonPressed(_ sender: Any) {
+        print("quit button pressed")
+        game = nil
+        navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func optionsPauseMenuResumeButtonPressed(_ sender: Any) {
         // TODO: implement game resume
         isPaused = false
         animateOptionsMenuClose()
-        game.gameResume()
+        game!.gameResume()
+    }
+    
+    fileprivate func destroyBeforeDismiss(){
+    
     }
     
     
@@ -74,11 +91,11 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return game.gameBoard[section].count;
+        return game!.gameBoard[section].count;
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return game.gameBoard.count;
+        return game!.gameBoard.count;
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -92,12 +109,17 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        game.cellPressed(x: indexPath.row, y: indexPath.section)
+        game!.cellPressed(x: indexPath.row, y: indexPath.section)
     }
    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         // UIEdgeInsetsMake (top, left, bottom, right)
-        let leftRight = CGFloat((gameBoardCollectionView.frame.width - (CGFloat(game.gameBoard[section].count - 1) * tileMargin) - (cellWidth! * CGFloat(game.gameBoard[section].count))) / 2)
+        
+        let a = (CGFloat((game?.gameBoard[section].count)! - 1) * tileMargin)
+        let b = (cellWidth! * CGFloat((game?.gameBoard[section].count)!))
+        
+        let leftRight = CGFloat((gameBoardCollectionView.frame.width - a - b) / 2)
+        
         if(section == 0){
             return UIEdgeInsetsMake(tileMargin, leftRight, tileMargin / 2, leftRight)
         } else if(section == config.numberOfRows - 1){
@@ -219,10 +241,11 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     .calculationModeCubic
                 ],
                 animations: {
+                    moleHitImageView.alpha = 0.1
                     moleHitImageView.transform = CGAffineTransform(
                         translationX: CGFloat(self.utils.randomInRange(min: 0.0, max: Double(self.gameBoardContainerView.frame.width))),
                         y: CGFloat(self.utils.randomInRange(min: 0.0, max: Double(self.gameBoardContainerView.frame.width)))
-                        ).concatenating(CGAffineTransform(rotationAngle: CGFloat(randomAngle)))
+                        ).concatenating(CGAffineTransform(rotationAngle: CGFloat(randomAngle))).concatenating(CGAffineTransform(scaleX: 0.3, y: 0.3))
                 },
                 completion: { _ in
                     moleHitImageView.removeFromSuperview()

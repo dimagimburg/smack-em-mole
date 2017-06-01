@@ -18,7 +18,7 @@ class Game: GameTimersManagerDelegate {
 
     // more about delegation https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html
     
-    var delegate: SmackEmMoleDelegate?
+    weak var delegate: SmackEmMoleDelegate?
     var gameBoard: Array<Array<Cell>>!
     var freeCells: [Cell] = [Cell]()
     var config: Config = Config.sharedInstance
@@ -51,6 +51,10 @@ class Game: GameTimersManagerDelegate {
         
         // delegation
         gameTimersManager.delegate = self
+    }
+    
+    deinit {
+        print("game deinit")
     }
     
     fileprivate func gameGenerateGameBoard() -> Array<Array<Cell>>{
@@ -240,8 +244,8 @@ class Game: GameTimersManagerDelegate {
             
             isPenaltyMode = true
             
-            gameTimersManager.addDelayedTimer(widthDelay: config.timePenaltyMode, withCallback: {
-                self.isPenaltyMode = false
+            gameTimersManager.addDelayedTimer(widthDelay: config.timePenaltyMode, withCallback: { [weak self] in
+                self?.isPenaltyMode = false
             })
             
             // flush all timers running right now, sort of board clearance as a penalty for hitting malicious mole
@@ -380,7 +384,7 @@ class Game: GameTimersManagerDelegate {
     
 }
 
-protocol SmackEmMoleDelegate {
+protocol SmackEmMoleDelegate: class {
     func gameBeforeTimerStarted(secondsToZero: Int)
     func gameBeforeTimerSecondTick(second: Int)
     func gameBeforeTimerFinished()
