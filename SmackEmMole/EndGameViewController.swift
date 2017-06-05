@@ -11,28 +11,32 @@ import UIKit
 class EndGameViewController: UIViewController {
     
     var player: Player?
+    var config: Config = Config.sharedInstance
 
+    @IBOutlet weak var playerNameTextField: UITextField!
+    
     @IBAction func submitButtonPressed(_ sender: Any) {
+        
+    }
+    
+    @IBAction func skipButtonPressed(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        print("endgame view will apear")
-    }
-    
     override func viewDidLoad() {
-        print("endgame view did load")
         super.viewDidLoad()
-        
         releaseGameViewController()
-        
-        // Do any additional setup after loading the view.
+        setupView()
     }
     
-    func releaseGameViewController(){
+    private func releaseGameViewController(){
         if let nvc = self.navigationController, nvc.viewControllers.count > 2 {
             nvc.viewControllers.remove(at: nvc.viewControllers.count - 2)
         }
+    }
+    
+    private func setupView(){
+        playerNameTextField.placeholder = player?.playerName
     }
 
 }

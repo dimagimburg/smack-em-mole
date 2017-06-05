@@ -366,7 +366,7 @@
                                         <color key="textColor" red="0.45469588041305542" green="0.24939271807670593" blue="0.0069291014224290848" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="sdfsdf" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YAr-c3-Jdg" userLabel="PlayerNameTextField">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YAr-c3-Jdg" userLabel="PlayerNameTextField">
                                         <rect key="frame" x="0.0" y="77" width="288" height="50"/>
                                         <color key="backgroundColor" red="0.95640175687480089" green="0.90271310784763092" blue="0.75312315719224876" alpha="0.72541202910958902" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -399,6 +399,9 @@
                                         <state key="normal" title="or skip">
                                             <color key="titleColor" red="0.48999093117447678" green="0.26931825770468309" blue="0.012861270592374976" alpha="0.6248394691780822" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="skipButtonPressed:" destination="Omi-Ud-Xeh" eventType="touchUpInside" id="OQ6-3v-4do"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -434,6 +437,9 @@
                             <constraint firstItem="jDZ-Wb-eTM" firstAttribute="leading" secondItem="1M5-un-svx" secondAttribute="leadingMargin" id="ylY-fh-MTG"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="playerNameTextField" destination="YAr-c3-Jdg" id="fEP-cI-imC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GYg-AP-7cl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

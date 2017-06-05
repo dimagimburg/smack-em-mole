@@ -68,10 +68,12 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         print("view did disappear")
         //dismiss(animated: false, completion: nil)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "gameFinishedSegue" {
+            let vc = segue.destination as! EndGameViewController
+            vc.player = game?.player
+        }
     }
     
     @IBAction func pauseButtonPressed(_ sender: Any) {

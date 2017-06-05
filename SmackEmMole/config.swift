@@ -76,4 +76,15 @@ class Config {
         case SPECIAL_DOUBLE
     }
     
+    // Data
+    
+    enum PersistablePlayerProperties: String {
+        case NAME = "name"
+        case SCORE = "score"
+        case LONGITUDE = "lng"
+        case LATITUDE = "lat"
+    }
+    
+    let HIGH_SCORES_FILE_NAME = "highscores_file"
+    
 }
