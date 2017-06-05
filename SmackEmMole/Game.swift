@@ -15,6 +15,7 @@ class Game: GameTimersManagerDelegate {
     // 2. make order with x and y and use row and column instead or section and row
     // 3. make the random choise of mole type better
     // 4. set the penalty mode also on the delegate so we can catch it in the view controller
+    // 5. game state enum (gameIsOn, gameIsFinished)
 
     // more about delegation https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html
     
@@ -27,6 +28,7 @@ class Game: GameTimersManagerDelegate {
     var currentOngoingGameMode = Config.GameOngoingMode.REGULAR
     var gameTimersManager = GameTimersManager()
     var gameIsOn: Bool = false
+    var gameIsFinished: Bool = false
     var isPenaltyMode = false
     
     var dateGameBegins: Date?
@@ -162,6 +164,7 @@ class Game: GameTimersManagerDelegate {
     fileprivate func gameFinished(){
         gameTimersManager.flushAllHideTimers() // when main timer finished clear all moles popped
         gameIsOn = false
+        gameIsFinished = true
         delegate?.gameFinished()
     }
     

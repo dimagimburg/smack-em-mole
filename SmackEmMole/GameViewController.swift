@@ -35,6 +35,7 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     override func viewDidLoad() {
+        print("view di load")
         super.viewDidLoad()
         
         setupGameBoard()
@@ -42,6 +43,30 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         // game config
         game!.delegate = self
         game!.gameStart()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        print("vid did appear")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print("view will appear")
+        if let game = game {
+            if(game.gameIsFinished){
+                self.game = nil
+                print("game is finished dismissing")
+                dismiss(animated: true, completion: nil)
+            }
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        print("view will disappear")
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        print("view did disappear")
+        //dismiss(animated: false, completion: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -72,11 +97,6 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         animateOptionsMenuClose()
         game!.gameResume()
     }
-    
-    fileprivate func destroyBeforeDismiss(){
-    
-    }
-    
     
     func setupGameBoard(){
         self.gameBoardCollectionView.delegate = self
@@ -156,9 +176,7 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             animations: {
                 self.optionsPauseMenuView?.isHidden = true
             },
-            completion: { _ in
-            
-            }
+            completion: nil
         )
         
     }
@@ -294,6 +312,7 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func gameFinished(){
         print("game finished")
         timerMainTop.text = "Game Finished"
+        performSegue(withIdentifier: "gameFinishedSegue", sender: nil)
     }
     
     func molePopped(x: Int, y: Int, moleType: MoleType){
