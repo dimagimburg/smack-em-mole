@@ -18,10 +18,11 @@
 		670575911E92EB4A00CAADAF /* Mole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670575901E92EB4A00CAADAF /* Mole.swift */; };
 		670575941E92EE2700CAADAF /* config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670575931E92EE2700CAADAF /* config.swift */; };
 		670575971E92F53300CAADAF /* MoleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670575961E92F53300CAADAF /* MoleCollectionViewCell.swift */; };
+		67336C991EF322330042FAD6 /* SmackEmMoleDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67336C981EF322330042FAD6 /* SmackEmMoleDataManager.swift */; };
 		673C6D961E990DBB00E0CF34 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673C6D951E990DBB00E0CF34 /* Game.swift */; };
 		673C6D981E990F0200E0CF34 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673C6D971E990F0200E0CF34 /* Cell.swift */; };
 		67611B571EDDD0AD00919884 /* SHOWG.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 67611B561EDDD0AD00919884 /* SHOWG.TTF */; };
-		67611B591EE159BE00919884 /* EndGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67611B581EE159BE00919884 /* EndGameViewController.swift */; };
+		67611B591EE159BE00919884 /* EndGameHighScoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67611B581EE159BE00919884 /* EndGameHighScoreViewController.swift */; };
 		67611B5C1EE5F82300919884 /* PersistablePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67611B5B1EE5F82300919884 /* PersistablePlayer.swift */; };
 		67C4EE6D1E9D874C00E52FC6 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C4EE6C1E9D874C00E52FC6 /* Utils.swift */; };
 		67C4EE6F1EA3D30500E52FC6 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C4EE6E1EA3D30500E52FC6 /* Player.swift */; };
@@ -65,10 +66,11 @@
 		670575901E92EB4A00CAADAF /* Mole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mole.swift; sourceTree = "<group>"; };
 		670575931E92EE2700CAADAF /* config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = config.swift; sourceTree = "<group>"; };
 		670575961E92F53300CAADAF /* MoleCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoleCollectionViewCell.swift; sourceTree = "<group>"; };
+		67336C981EF322330042FAD6 /* SmackEmMoleDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmackEmMoleDataManager.swift; sourceTree = "<group>"; };
 		673C6D951E990DBB00E0CF34 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		673C6D971E990F0200E0CF34 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		67611B561EDDD0AD00919884 /* SHOWG.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = SHOWG.TTF; sourceTree = "<group>"; };
-		67611B581EE159BE00919884 /* EndGameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndGameViewController.swift; sourceTree = "<group>"; };
+		67611B581EE159BE00919884 /* EndGameHighScoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndGameHighScoreViewController.swift; sourceTree = "<group>"; };
 		67611B5B1EE5F82300919884 /* PersistablePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistablePlayer.swift; sourceTree = "<group>"; };
 		67C4EE6C1E9D874C00E52FC6 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		67C4EE6E1EA3D30500E52FC6 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -162,7 +164,7 @@
 			children = (
 				6705758B1E92D5C400CAADAF /* GameViewController.swift */,
 				6705755E1E92D53900CAADAF /* MainMenuViewController.swift */,
-				67611B581EE159BE00919884 /* EndGameViewController.swift */,
+				67611B581EE159BE00919884 /* EndGameHighScoreViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -187,6 +189,7 @@
 				67C4EE6C1E9D874C00E52FC6 /* Utils.swift */,
 				67FC660C1EAB9C17009A7415 /* Stats.swift */,
 				67FC660A1EA7DDC5009A7415 /* GameTimersManager.swift */,
+				67336C981EF322330042FAD6 /* SmackEmMoleDataManager.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -351,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				67C4EE6F1EA3D30500E52FC6 /* Player.swift in Sources */,
+				67336C991EF322330042FAD6 /* SmackEmMoleDataManager.swift in Sources */,
 				67FC660D1EAB9C17009A7415 /* Stats.swift in Sources */,
 				67611B5C1EE5F82300919884 /* PersistablePlayer.swift in Sources */,
 				67FC660B1EA7DDC5009A7415 /* GameTimersManager.swift in Sources */,
@@ -363,7 +367,7 @@
 				673C6D981E990F0200E0CF34 /* Cell.swift in Sources */,
 				6705758C1E92D5C400CAADAF /* GameViewController.swift in Sources */,
 				67C4EE711EA3D31000E52FC6 /* Score.swift in Sources */,
-				67611B591EE159BE00919884 /* EndGameViewController.swift in Sources */,
+				67611B591EE159BE00919884 /* EndGameHighScoreViewController.swift in Sources */,
 				6705755D1E92D53900CAADAF /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

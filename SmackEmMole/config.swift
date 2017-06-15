@@ -22,7 +22,7 @@ class Config {
     
     // Timers
     let timerBeforeGameStartSeconds = 3
-    let timerGameLength = 60
+    let timerGameLength = 10
     let timeMinimumMoleShow = 1.5
     let timeMaximumMoleShow = 3.0
     let timeDoubleMode = 5.0

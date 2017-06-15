@@ -311,17 +311,98 @@
                         <outlet property="scoreLabel" destination="qu8-Mc-LAb" id="OdN-Jq-DrA"/>
                         <outlet property="timerBeforeGameStartedView" destination="CCO-L7-l7z" id="BDt-nN-dWd"/>
                         <outlet property="timerMainTop" destination="RW7-qV-gUO" id="gGV-3z-zQi"/>
-                        <segue destination="Omi-Ud-Xeh" kind="show" identifier="gameFinishedSegue" id="UiI-kg-GcD"/>
+                        <segue destination="Omi-Ud-Xeh" kind="show" identifier="gameFinishedHighscoreSegue" id="UiI-kg-GcD"/>
+                        <segue destination="Ykk-Dm-J7S" kind="show" identifier="gameFinishedRegularSegue" id="D1V-ng-sZR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iLA-HO-zxP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1794" y="-643"/>
         </scene>
-        <!--End Game View Controller-->
+        <!--View Controller-->
+        <scene sceneID="k1J-B4-bYW">
+            <objects>
+                <viewController id="Ykk-Dm-J7S" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="TQg-60-Kh5"/>
+                        <viewControllerLayoutGuide type="bottom" id="Jbw-R6-ZZl"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="oQg-0T-qrv">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AWh-T7-8tJ" userLabel="BackgroundWrapperView">
+                                <rect key="frame" x="0.0" y="10" width="320" height="568"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="S3H-EG-B4c">
+                                        <rect key="frame" x="0.0" y="8" width="320" height="552"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.5801231861114502" green="0.32060295343399048" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nice Try!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XUm-2E-5Ab">
+                                <rect key="frame" x="0.0" y="40" width="320" height="35"/>
+                                <fontDescription key="fontDescription" name="ShowcardGothic-Reg" family="Showcard Gothic" pointSize="35"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="not an highscore, keep on trying" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LXr-hn-a8L">
+                                <rect key="frame" x="0.0" y="105" width="320" height="17"/>
+                                <fontDescription key="fontDescription" name="ShowcardGothic-Reg" family="Showcard Gothic" pointSize="17"/>
+                                <color key="textColor" red="0.40987864847715738" green="0.40987864847715738" blue="0.40987864847715738" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mhu-bM-yUE">
+                                <rect key="frame" x="16" y="152" width="288" height="50"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.10790346746575342" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="LG9-YV-U11"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="ShowcardGothic-Reg" family="Showcard Gothic" pointSize="17"/>
+                                <state key="normal" title="highscores">
+                                    <color key="titleColor" red="0.45469588041305542" green="0.24939271807670593" blue="0.0069291014224290848" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NRx-tU-CAZ">
+                                <rect key="frame" x="16" y="232" width="288" height="50"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.11108732876712329" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="ShowcardGothic-Reg" family="Showcard Gothic" pointSize="17"/>
+                                <state key="normal" title="Main Menu">
+                                    <color key="titleColor" red="0.46647858619689941" green="0.26116511225700378" blue="0.013807039707899094" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.5801231861114502" green="0.32060295343399048" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="XUm-2E-5Ab" firstAttribute="top" secondItem="TQg-60-Kh5" secondAttribute="bottom" constant="20" id="0BA-CC-1IR"/>
+                            <constraint firstItem="AWh-T7-8tJ" firstAttribute="top" secondItem="TQg-60-Kh5" secondAttribute="bottom" constant="-10" id="1LB-IW-cgk"/>
+                            <constraint firstItem="NRx-tU-CAZ" firstAttribute="leading" secondItem="oQg-0T-qrv" secondAttribute="leadingMargin" id="1zF-Fs-fIy"/>
+                            <constraint firstItem="XUm-2E-5Ab" firstAttribute="width" secondItem="oQg-0T-qrv" secondAttribute="width" id="3rE-2S-C6h"/>
+                            <constraint firstItem="XUm-2E-5Ab" firstAttribute="centerX" secondItem="oQg-0T-qrv" secondAttribute="centerX" id="5dr-zD-Vkh"/>
+                            <constraint firstItem="AWh-T7-8tJ" firstAttribute="leading" secondItem="oQg-0T-qrv" secondAttribute="leadingMargin" constant="-16" id="AFq-1c-cfM"/>
+                            <constraint firstItem="LXr-hn-a8L" firstAttribute="centerX" secondItem="XUm-2E-5Ab" secondAttribute="centerX" id="Dnu-XZ-wm5"/>
+                            <constraint firstItem="Mhu-bM-yUE" firstAttribute="top" secondItem="LXr-hn-a8L" secondAttribute="bottom" constant="30" id="IJA-b6-DPg"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Mhu-bM-yUE" secondAttribute="trailing" id="Z5F-tT-pst"/>
+                            <constraint firstItem="Mhu-bM-yUE" firstAttribute="leading" secondItem="oQg-0T-qrv" secondAttribute="leadingMargin" id="b7w-2x-qmW"/>
+                            <constraint firstItem="AWh-T7-8tJ" firstAttribute="width" secondItem="oQg-0T-qrv" secondAttribute="width" id="c6c-Fv-n4X"/>
+                            <constraint firstItem="NRx-tU-CAZ" firstAttribute="height" secondItem="Mhu-bM-yUE" secondAttribute="height" id="gca-Xx-dcA"/>
+                            <constraint firstItem="AWh-T7-8tJ" firstAttribute="height" secondItem="oQg-0T-qrv" secondAttribute="height" id="jMl-P8-vu8"/>
+                            <constraint firstItem="LXr-hn-a8L" firstAttribute="top" secondItem="XUm-2E-5Ab" secondAttribute="bottom" constant="30" id="mYc-Wz-ZTI"/>
+                            <constraint firstItem="LXr-hn-a8L" firstAttribute="width" secondItem="XUm-2E-5Ab" secondAttribute="width" id="o9Q-eJ-6zm"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="NRx-tU-CAZ" secondAttribute="trailing" id="oI9-zJ-aLy"/>
+                            <constraint firstItem="NRx-tU-CAZ" firstAttribute="top" secondItem="Mhu-bM-yUE" secondAttribute="bottom" constant="30" id="wzr-Bv-82R"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WMj-Vg-RyY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2615.625" y="-959.15492957746483"/>
+        </scene>
+        <!--End Game High Score View Controller-->
         <scene sceneID="II8-IX-Dh7">
             <objects>
-                <viewController id="Omi-Ud-Xeh" customClass="EndGameViewController" customModule="SmackEmMole" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Omi-Ud-Xeh" customClass="EndGameHighScoreViewController" customModule="SmackEmMole" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bKq-Iy-8CI"/>
                         <viewControllerLayoutGuide type="bottom" id="zcB-oX-rJO"/>
@@ -443,7 +524,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GYg-AP-7cl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2533" y="-643"/>
+            <point key="canvasLocation" x="2616" y="-239"/>
         </scene>
     </scenes>
     <resources>

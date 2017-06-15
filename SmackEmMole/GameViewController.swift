@@ -70,8 +70,8 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "gameFinishedSegue" {
-            let vc = segue.destination as! EndGameViewController
+        if segue.identifier == "gameFinishedHighscoreSegue" {
+            let vc = segue.destination as! EndGameHighScoreViewController
             vc.player = game?.player
         }
     }
@@ -314,7 +314,7 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func gameFinished(){
         print("game finished")
         timerMainTop.text = "Game Finished"
-        performSegue(withIdentifier: "gameFinishedSegue", sender: nil)
+        performSegue(withIdentifier: "gameFinishedHighscoreSegue", sender: nil)
     }
     
     func molePopped(x: Int, y: Int, moleType: MoleType){

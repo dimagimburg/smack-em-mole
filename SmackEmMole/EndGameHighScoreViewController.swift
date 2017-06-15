@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EndGameViewController: UIViewController {
+class EndGameHighScoreViewController: UIViewController {
     
     var player: Player?
     var config: Config = Config.sharedInstance

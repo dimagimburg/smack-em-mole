@@ -165,6 +165,11 @@ class Game: GameTimersManagerDelegate {
         gameTimersManager.flushAllHideTimers() // when main timer finished clear all moles popped
         gameIsOn = false
         gameIsFinished = true
+        
+        let dataManager = SmackEmMoleDataManager()
+        dataManager.addHighScore(player: player)
+        dataManager.save()
+        
         delegate?.gameFinished()
     }
     

@@ -11,8 +11,14 @@ import Foundation
 class Player {
     var playerName = ""
     var score = Score()
+    var lng: Int?
+    var lat: Int?
     
     init(withName playerName: String){
         self.playerName = playerName
+    }
+    
+    func setLocation(){
+    
     }
 }
