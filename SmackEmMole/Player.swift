@@ -9,16 +9,19 @@
 import Foundation
 
 class Player {
-    var playerName = ""
+    var playerName = "Player Name"
     var score = Score()
-    var lng: Int?
-    var lat: Int?
+    var lng: Double?
+    var lat: Double?
     
     init(withName playerName: String){
         self.playerName = playerName
     }
     
-    func setLocation(){
-    
+    func setLocation(lat: Double?, lng: Double?){
+        if let lat = lat, let lng = lng {
+            self.lat = lat
+            self.lng = lng
+        }
     }
 }

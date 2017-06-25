@@ -231,15 +231,19 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 break;
             case MoleType.MALICIOUS:
                 moleHitImageView.image = UIImage(named: "mole_malicious")
+                showToast(message: "awww snap!")
                 break;
             case MoleType.SPECIAL_DOUBLE:
                 moleHitImageView.image = UIImage(named: "mole_special_double")
+                showToast(message: "it's double time!")
                 break;
             case MoleType.SPECIAL_QUANTITY:
                 moleHitImageView.image = UIImage(named: "mole_special_extra")
+                showToast(message: "i see them everywhere!!")
                 break;
             case MoleType.SPECIAL_TIME:
                 moleHitImageView.image = UIImage(named: "mole_special_time")
+                showToast(message: "woo! few more seconds!")
                 break;
             }
             
@@ -311,10 +315,25 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         print("game stopped")
     }
     
-    func gameFinished(){
-        print("game finished")
+    func gameFinished(isHighScore: Bool){
         timerMainTop.text = "Game Finished"
-        performSegue(withIdentifier: "gameFinishedHighscoreSegue", sender: nil)
+        
+        if(isHighScore){
+            performSegue(withIdentifier: "gameFinishedHighscoreSegue", sender: nil)
+        } else {
+            performSegue(withIdentifier: "gameFinishedRegularSegue", sender: nil)
+        }
+        
+    }
+    
+    override func motionBegan(_ motion: UIEventSubtype, with event: UIEvent?) {
+        let toast = game?.shake()
+        if let toast = toast {
+            if toast {
+                showToast(message: "Shaky Shaky!")
+            }
+        }
+        
     }
     
     func molePopped(x: Int, y: Int, moleType: MoleType){
@@ -357,6 +376,25 @@ class GameViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func ongoingGameModeChanged(newMode: Config.GameOngoingMode) {
     
+    }
+    
+    func showToast(message : String) {
+        
+        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 75, y: self.view.frame.size.height-100, width: 150, height: 35))
+        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        toastLabel.textColor = UIColor.white
+        toastLabel.textAlignment = .center;
+        toastLabel.font = UIFont(name: "Montserrat-Light", size: 12.0)
+        toastLabel.text = message
+        toastLabel.alpha = 1.0
+        toastLabel.layer.cornerRadius = 10;
+        toastLabel.clipsToBounds  =  true
+        self.view.addSubview(toastLabel)
+        UIView.animate(withDuration: 1.5, delay: 0.05, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            toastLabel.removeFromSuperview()
+        })
     }
 
 }

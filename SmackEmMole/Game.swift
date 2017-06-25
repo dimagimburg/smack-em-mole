@@ -24,7 +24,7 @@ class Game: GameTimersManagerDelegate {
     var freeCells: [Cell] = [Cell]()
     var config: Config = Config.sharedInstance
     var utils = Utils()
-    var player = Player(withName: "Player (default)")
+    var player = Player(withName: "Player Name")
     var currentOngoingGameMode = Config.GameOngoingMode.REGULAR
     var gameTimersManager = GameTimersManager()
     var gameIsOn: Bool = false
@@ -42,6 +42,8 @@ class Game: GameTimersManagerDelegate {
     
     var popTimes: [Double]!
     
+    var numberOfShakesDone: Int = 0
+    
     // counts the number of times the special time mole hit in order to know when to add more mole pops when time is added
     var specialTimeMoleHit: Int = 0
     
@@ -50,6 +52,8 @@ class Game: GameTimersManagerDelegate {
         timeUntilGameEnds = config.timerGameLength
         gameBoard = gameGenerateGameBoard()
         popTimes = generateMolePopsTimes()
+        
+        numberOfShakesDone = config.numberOfShakesAllowed
         
         // delegation
         gameTimersManager.delegate = self
@@ -167,10 +171,8 @@ class Game: GameTimersManagerDelegate {
         gameIsFinished = true
         
         let dataManager = SmackEmMoleDataManager()
-        dataManager.addHighScore(player: player)
-        dataManager.save()
         
-        delegate?.gameFinished()
+        delegate?.gameFinished(isHighScore: dataManager.isHighScore(score: self.player.score.score))
     }
     
     public func gameStart(){
@@ -358,6 +360,16 @@ class Game: GameTimersManagerDelegate {
         
     }
     
+    public func shake() -> Bool{
+        if numberOfShakesDone > 0 {
+            gameTimersManager.addHideSecondsToAllCells(seconds: config.timeShakeMode)
+            numberOfShakesDone -= 1
+            return true
+        }
+        
+        return false
+    }
+    
     // CellTimersManager delegate
     
     func cellPrepare(){
@@ -401,7 +413,7 @@ protocol SmackEmMoleDelegate: class {
     func gamePaused()
     func gameResumed()
     func gameStopped()
-    func gameFinished()
+    func gameFinished(isHighScore: Bool)
     func molePopped(x: Int, y: Int, moleType: MoleType)
     func moleHid(x: Int, y: Int, isHit: Bool, moleType: MoleType?)
     func scoreChanged(score: Score)

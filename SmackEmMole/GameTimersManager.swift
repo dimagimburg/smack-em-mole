@@ -105,6 +105,21 @@ class GameTimersManager {
         regularTimers[key]?.addLoops(moreLoops: loops)
     }
     
+    func addHideSecondsToAllCells(seconds: Double){
+        for (_, timer) in hideCellTimers {
+            timer.pause()
+        }
+        
+        let t = DelayedTimer(date: Date(), delay: seconds, callback: { [weak self] in
+            for (_, timer) in (self?.hideCellTimers)! {
+                timer.resume()
+            }
+        })
+        
+        t.start()
+        
+    }
+    
 }
 
 protocol DelayedTimerProtocol {

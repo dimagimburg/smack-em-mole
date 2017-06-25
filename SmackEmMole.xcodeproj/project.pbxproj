@@ -19,6 +19,9 @@
 		670575941E92EE2700CAADAF /* config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670575931E92EE2700CAADAF /* config.swift */; };
 		670575971E92F53300CAADAF /* MoleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670575961E92F53300CAADAF /* MoleCollectionViewCell.swift */; };
 		67336C991EF322330042FAD6 /* SmackEmMoleDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67336C981EF322330042FAD6 /* SmackEmMoleDataManager.swift */; };
+		67336C9B1EFE75B90042FAD6 /* HighScoresViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67336C9A1EFE75B90042FAD6 /* HighScoresViewController.swift */; };
+		67336C9D1EFEB31D0042FAD6 /* HighScoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67336C9C1EFEB31D0042FAD6 /* HighScoreTableViewCell.swift */; };
+		67336CA01EFEC1F50042FAD6 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67336C9F1EFEC1F50042FAD6 /* CoreLocation.framework */; };
 		673C6D961E990DBB00E0CF34 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673C6D951E990DBB00E0CF34 /* Game.swift */; };
 		673C6D981E990F0200E0CF34 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673C6D971E990F0200E0CF34 /* Cell.swift */; };
 		67611B571EDDD0AD00919884 /* SHOWG.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 67611B561EDDD0AD00919884 /* SHOWG.TTF */; };
@@ -67,6 +70,9 @@
 		670575931E92EE2700CAADAF /* config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = config.swift; sourceTree = "<group>"; };
 		670575961E92F53300CAADAF /* MoleCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoleCollectionViewCell.swift; sourceTree = "<group>"; };
 		67336C981EF322330042FAD6 /* SmackEmMoleDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmackEmMoleDataManager.swift; sourceTree = "<group>"; };
+		67336C9A1EFE75B90042FAD6 /* HighScoresViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighScoresViewController.swift; sourceTree = "<group>"; };
+		67336C9C1EFEB31D0042FAD6 /* HighScoreTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighScoreTableViewCell.swift; sourceTree = "<group>"; };
+		67336C9F1EFEC1F50042FAD6 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		673C6D951E990DBB00E0CF34 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		673C6D971E990F0200E0CF34 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		67611B561EDDD0AD00919884 /* SHOWG.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = SHOWG.TTF; sourceTree = "<group>"; };
@@ -84,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67336CA01EFEC1F50042FAD6 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +118,7 @@
 				670575701E92D53900CAADAF /* SmackEmMoleTests */,
 				6705757B1E92D53900CAADAF /* SmackEmMoleUITests */,
 				6705755A1E92D53900CAADAF /* Products */,
+				67336C9E1EFEC1F50042FAD6 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -165,6 +173,7 @@
 				6705758B1E92D5C400CAADAF /* GameViewController.swift */,
 				6705755E1E92D53900CAADAF /* MainMenuViewController.swift */,
 				67611B581EE159BE00919884 /* EndGameHighScoreViewController.swift */,
+				67336C9A1EFE75B90042FAD6 /* HighScoresViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -198,8 +207,17 @@
 			isa = PBXGroup;
 			children = (
 				670575961E92F53300CAADAF /* MoleCollectionViewCell.swift */,
+				67336C9C1EFEB31D0042FAD6 /* HighScoreTableViewCell.swift */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		67336C9E1EFEC1F50042FAD6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				67336C9F1EFEC1F50042FAD6 /* CoreLocation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		67611B551EDDD09100919884 /* Fonts */ = {
@@ -361,6 +379,8 @@
 				6705755F1E92D53900CAADAF /* MainMenuViewController.swift in Sources */,
 				670575971E92F53300CAADAF /* MoleCollectionViewCell.swift in Sources */,
 				673C6D961E990DBB00E0CF34 /* Game.swift in Sources */,
+				67336C9D1EFEB31D0042FAD6 /* HighScoreTableViewCell.swift in Sources */,
+				67336C9B1EFE75B90042FAD6 /* HighScoresViewController.swift in Sources */,
 				670575911E92EB4A00CAADAF /* Mole.swift in Sources */,
 				67C4EE6D1E9D874C00E52FC6 /* Utils.swift in Sources */,
 				670575941E92EE2700CAADAF /* config.swift in Sources */,

@@ -22,12 +22,13 @@ class Config {
     
     // Timers
     let timerBeforeGameStartSeconds = 3
-    let timerGameLength = 10
+    let timerGameLength = 60
     let timeMinimumMoleShow = 1.5
     let timeMaximumMoleShow = 3.0
     let timeDoubleMode = 5.0
     let timeQuantityMode = 4.0
     let timePenaltyMode = 3.0
+    let timeShakeMode = 3.0
     
     // Board
     let numberOfRows = 5;
@@ -75,6 +76,8 @@ class Config {
         case SPECIAL_QUANTITY
         case SPECIAL_DOUBLE
     }
+    
+    let numberOfShakesAllowed = 3
     
     // Data
     
